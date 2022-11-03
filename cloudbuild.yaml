@@ -1,0 +1,3 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'deploy', '--project=cs4750scriptorium', '--version=$SHORT_SHA']
