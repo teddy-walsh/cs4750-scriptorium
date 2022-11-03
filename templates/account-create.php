@@ -4,7 +4,7 @@
     require 'styles/head_style.php'; 
     
     // on login screen, redirect to home if already logged in
-    if(isset($_SESSION['id'])){
+    if(isset($_SESSION["id"])){
         header('location:?command=home');
     }
     ?>
