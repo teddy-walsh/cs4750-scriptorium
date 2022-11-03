@@ -95,12 +95,14 @@ class Database {
         $user = $statement->fetch();
 
         if (!empty($user)) { // it found the user
-            // echo "<pre>";
-            //     print_r($user);
-            // echo "</pre>";
-            // echo "<pre>";
-            //     print_r($password);
-            // echo "</pre>";
+            echo "<pre>";
+                print_r($user);
+            echo "</pre>";
+            echo "<pre>";
+                print_r($password);
+            echo "</pre>";
+            echo password_hash($password, PASSWORD_DEFAULT);
+            echo $user["password"]);
 
             if (password_verify($password, $user["password"])) { // pw good?
                     $_SESSION["username"] = $user["display_name"];
