@@ -34,10 +34,9 @@
             </a>
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-              <li><a href="#" class="nav-link px-2 text-white">Home</a></li>
-              <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-              <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-              <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+              <li><a href="?command=home" class="nav-link px-2 text-white">Home</a></li>
+              <li><a href="#" class="nav-link px-2 text-white">Links</a></li>
+              <li><a href="#" class="nav-link px-2 text-white">More Links</a></li>
 
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown" aria-expanded="false" >Scripts</a>
