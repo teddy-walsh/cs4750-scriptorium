@@ -22,8 +22,9 @@
         <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
 
         <!-- CSS Stylesheet -->
-        <link rel="stylesheet" type="text/css" href="./styles/style.css">
+        <link rel="stylesheet" type="text/css" href="styles/style.css">
     </head>
+
 <body>
 
     <header class="p-3 header-color">
