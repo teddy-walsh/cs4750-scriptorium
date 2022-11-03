@@ -8,13 +8,6 @@ class Database {
             $password = getenv('DB_PASS');
             $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium";
 
-               //             $username = 'root';
-               // $password = 'vHdgxfiy+BLZp!8T6';
-               // $host = '34.145.156.4';
-               // $dbname = 'scriptorium';
-               // $dsn = "mysql:host=$host;dbname=$dbname"; 
- 
-
         try {
             // Connect to the database.
             $this->pdo = new PDO($dsn, $username, $password);
@@ -60,7 +53,7 @@ class Database {
             $statement = $this->pdo->prepare($query);
             $statement->bindValue(':email', $email);
             $statement->bindValue(':username', $username);
-            $statement->bindValue(':password', password_hash($password, PASSWORD_DEFAULT);
+            $statement->bindValue(':password', password_hash($password, PASSWORD_DEFAULT));
             $statement->execute();
             echo "Successfully added new user";
 
