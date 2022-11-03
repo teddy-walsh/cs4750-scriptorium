@@ -29,6 +29,7 @@ class Database {
                 // ]
                 // # [END_EXCLUDE]
             );
+            $this->pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
             echo "<p>You are connected to the database</p>";
         } catch (TypeError $e) {
             throw new RuntimeException(
@@ -62,6 +63,7 @@ class Database {
         $query = "INSERT INTO users(email, display_name, password)
                             VALUES (:email, :username, :password)";
         echo "Making it to add_user";
+        var_dump($_POST);
         try {
             $statement = $this->pdo->prepare($query);
             $statement->bindValue(':email', $_POST["email"]);
