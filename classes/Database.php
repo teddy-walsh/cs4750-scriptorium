@@ -1,16 +1,9 @@
 <?php
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
 class Database {
-    private $dbconn;
 
-    public function initDatabaseConnection(): PDO
-    {
-        try {
-            // Note: Saving credentials in environment variables is convenient, but not
-            // secure - consider a more secure solution such as
-            // Cloud Secret Manager (https://cloud.google.com/secret-manager) to help
-            // keep secrets safe.
+    private $pdo;
+
+    public function __construct() {
             $username = getenv('DB_USER'); // e.g. 'your_db_user'
             $password = getenv('DB_PASS'); // e.g. 'your_db_password'
             $dbName = getenv('DB_NAME'); // e.g. 'your_db_name'
@@ -23,11 +16,15 @@ class Database {
                 $instanceUnixSocket
             );
 
+               // $username = 'root';
+               // $password = '';
+               // $host = 'localhost:3306';
+               // $dbname = 'scriptorium';
+               // $dsn = "mysql:host=$host;dbname=$dbname"; 
+
+        try {
             // Connect to the database.
-            $this->dbconn = new PDO(
-                $dsn,
-                $username,
-                $password,
+            $this->pdo = new PDO($dsn, $username, $password,
                 # [START_EXCLUDE]
                 // Here we set the connection timeout to five seconds and ask PDO to
                 // throw an exception if any errors occur.
@@ -37,6 +34,7 @@ class Database {
                 ]
                 # [END_EXCLUDE]
             );
+            //echo "<p>You are connected to the database --- host=$host</p>";
         } catch (TypeError $e) {
             throw new RuntimeException(
                 sprintf(
@@ -63,7 +61,44 @@ class Database {
                 $e
             );
         }
-
-        // return $conn;
     }
+
+    function add_user($email, $username, $password) {
+        $query = "INSERT INTO users(email, display_name, password)
+                            VALUES (:email, :username, :password)";
+        try {
+            $statement = $this->pdo->prepare($query);
+            $statement->bindValue(':email', $_POST["email"]);
+            $statement->bindValue(':username', $_POST["username"]);
+            $statement->bindValue(':password', password_hash($_POST["password"], PASSWORD_DEFAULT));
+            $statement->execute();
+
+            if ($statement->rowCount() == 0)
+                echo "Failed to add a friend <br/>";
+            return true;
+        }
+        catch (PDOException $e) {
+            // echo $e->getMessage();
+            // if there is a specific SQL-related error message
+            //    echo "generic message (don't reveal SQL-specific message)";
+
+            if (strpos($e->getMessage(), "Duplicate")){
+                echo "Failed to add a friend <br/>";
+            }
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    function get_user_id($username) {
+        $query = "SELECT user_id FROM users WHERE (display_name=:username)";
+        $statement = $this->pdo->prepare($query);
+        $statement->bindValue(':username', $username);
+        $statement->execute();
+        $result = $statement->fetch();
+        return $result; 
+    }
+
+
 }

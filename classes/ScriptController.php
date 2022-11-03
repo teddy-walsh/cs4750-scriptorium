@@ -1,5 +1,7 @@
 <?php
 
+// include "db-connect.php";
+
 class ScriptController {
 
 	private $command;
@@ -14,6 +16,9 @@ class ScriptController {
         switch($this->command) {
             case "login":
                 $this->login();
+                break;
+            case "account-create":
+                $this->accountCreate();
                 break;
             case "logout":
                 $this->destroySession();
@@ -53,6 +58,42 @@ class ScriptController {
     public function login() {
     
         include "templates/login.php";
+    }
+
+    public function accountCreate() {
+        if (isset($_POST["email"])) { 
+            // password requirements checker
+            $password = $_POST["password"];
+            $uppercase = preg_match('@[A-Z]@', $password);
+            $lowercase = preg_match('@[a-z]@', $password);
+            $number    = preg_match('@[0-9]@', $password);
+
+            if(!$uppercase || !$lowercase || !$number || strlen($password) < 8) {
+                $message = "<div class='alert-danger'>Passwords must have at least:
+
+                    <ul>
+                    <li>One upper-case letter</li>
+                    <li>One lower-case letter</li>  
+                    <li>One number (0-9)</li>
+                    </ul>
+                    </div>";
+            } else {
+                // create a new user
+                $query = "INSERT INTO users(email, display_name, password)
+                            VALUES (:email, :username, :password)";
+                $insert = $this->db->add_user($_POST["email"], $_POST["username"], 
+                                    password_hash($_POST["password"], PASSWORD_DEFAULT));
+
+                if ($insert === false) {
+                    $message = "<div class='alert alert-danger'>Error inserting new user.</div>";
+                } else { // user successfully created
+                    $new_id = $this->db->get_user_id($_POST["username"]);
+                    $_SESSION["username"] = $_POST["username"];
+                    $_SESSION["id"] = $new_id[0];;
+                }
+            }
+        }
+        include "templates/account-create.php";
     }
 
 
