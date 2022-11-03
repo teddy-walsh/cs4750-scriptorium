@@ -18,7 +18,6 @@ class Database {
                // $dbname = 'scriptorium';
                // $dsn = "mysql:host=$host;dbname=$dbname"; 
         try {
-            echo "Reached here";
             // Connect to the database.
             $this->pdo = new PDO($dsn, $username, $password,
                 // # [START_EXCLUDE]
@@ -30,8 +29,7 @@ class Database {
                 // ]
                 // # [END_EXCLUDE]
             );
-            echo "Trying to get here";
-            echo "<p>You are connected to the database --- host=$host</p>";
+            echo "<p>You are connected to the database</p>";
         } catch (TypeError $e) {
             throw new RuntimeException(
                 sprintf(
@@ -63,6 +61,7 @@ class Database {
     function add_user($email, $username, $password) {
         $query = "INSERT INTO users(email, display_name, password)
                             VALUES (:email, :username, :password)";
+        echo "Making it to add_user";
         try {
             $statement = $this->pdo->prepare($query);
             $statement->bindValue(':email', $_POST["email"]);
