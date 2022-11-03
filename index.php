@@ -1,9 +1,6 @@
 <?php 
 session_start();
 
-// Makes sure the data tables exist.
-// require 'setup.php';
-
 // Register the autoloader
 spl_autoload_register(function($classname) {
     include "classes/$classname.php";
