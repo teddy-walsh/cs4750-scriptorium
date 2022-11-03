@@ -6,7 +6,14 @@ class Database {
     public function __construct() {
             $username = getenv('DB_USER');
             $password = getenv('DB_PASS');
-            $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium"; 
+            $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium";
+
+               //             $username = 'root';
+               // $password = 'vHdgxfiy+BLZp!8T6';
+               // $host = '34.145.156.4';
+               // $dbname = 'scriptorium';
+               // $dsn = "mysql:host=$host;dbname=$dbname"; 
+ 
 
         try {
             // Connect to the database.
@@ -102,7 +109,7 @@ class Database {
                 print_r($password);
             echo "</pre>";
             echo password_hash($password, PASSWORD_DEFAULT);
-            echo $user["password"]);
+            echo $user["password"];
 
             if (password_verify($password, $user["password"])) { // pw good?
                     $_SESSION["username"] = $user["display_name"];
