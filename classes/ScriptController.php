@@ -18,6 +18,9 @@ class ScriptController {
             case "account-create":
                 $this->accountCreate();
                 break;
+            case "script-post":
+                $this->scriptPost();
+                break;
             case "logout":
                 $this->destroySession();
             case "home":
@@ -99,6 +102,10 @@ class ScriptController {
             }
         }
         include "templates/account-create.php";
+    }
+
+    public function scriptPost() {
+        include "templates/script_post.php";
     }
 
 
