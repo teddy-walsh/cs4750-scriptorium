@@ -4,18 +4,17 @@ class Database {
     private $pdo;
 
     public function __construct() {
-            // $username = getenv('DB_USER'); // e.g. 'your_db_user'
-            // $password = getenv('DB_PASS'); // e.g. 'your_db_password'
-            // $dbname = getenv('DB_NAME'); // e.g. 'your_db_name'
-            // $instanceUnixSocket = getenv('INSTANCE_UNIX_SOCKET'); // e.g. '/cloudsql/project:region:instance'
+            $username = getenv('DB_USER'); // e.g. 'your_db_user'
+            $password = getenv('DB_PASS'); // e.g. 'your_db_password'
+            $dbname = getenv('DB_NAME'); // e.g. 'your_db_name'
+            $instanceUnixSocket = getenv('INSTANCE_UNIX_SOCKET'); // e.g. '/cloudsql/project:region:instance'
 
             // // Connect using UNIX sockets
-            // $dsn = "mysql:unix_socket=$instanceUnixSocket;dbname=$dbname";
+            $dsn = "mysql:unix_socket=" . $instanceUnixSocket . ";dbname=" . $dbname;
 
 
-               $username = getenv('DB_USER');
-               $password = getenv('DB_PASS');
-               $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium"; 
+
+               // $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium"; 
 
                echo getenv('DB_USER');
 
