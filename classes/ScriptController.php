@@ -12,13 +12,18 @@ class ScriptController {
 
     public function run() {
         switch($this->command) {
+            case "login":
+                $this->login();
+                break;
+            case "logout":
+                $this->destroySession();
             case "home":
             default:
                 $this->home();         
         }
     }
 
-                // Clear the whole session
+    // Clear the whole session
     private function destroySession() {          
         // Unset all of the session variables.
         $_SESSION = array();
@@ -42,4 +47,14 @@ class ScriptController {
     
         include "templates/home.php";
     }
+
+
+    // Manage the page for the login page
+    public function login() {
+    
+        include "templates/login.php";
+    }
+
+
+
 }
