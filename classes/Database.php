@@ -51,9 +51,9 @@ class Database {
                     VALUES (:email, :username, :password)";
         try {
             $statement = $this->pdo->prepare($query);
-            $statement->bindValue(':email', $_POST["email"]);
-            $statement->bindValue(':username', $_POST["username"]);
-            $statement->bindValue(':password', password_hash($_POST["password"], PASSWORD_DEFAULT));
+            $statement->bindValue(':email', $email);
+            $statement->bindValue(':username', $username);
+            $statement->bindValue(':password', password_hash($password, PASSWORD_DEFAULT));
             $statement->execute();
             //echo "Successfully added new user";
 
@@ -107,6 +107,42 @@ class Database {
             }
         }
 
+    }
+
+    // TODO Fill the foreign key table as well
+    function post_new_script($title, $blurb, $script, $genre, $user_id) {
+        $query = "INSERT INTO scripts(title, blurb, script_body, genre) 
+                    VALUES (:title, :blurb, :script, :genre)";
+        try {
+            $statement = $this->pdo->prepare($query);
+            $statement->bindValue(':title', $title);
+            $statement->bindValue(':blurb', $blurb);
+            $statement->bindValue(':script', $script);
+            $statement->bindValue(':genre', $genre);
+            $statement->execute();
+
+            return true; // this gets checked on the sign-up page to then log in the new user
+        }
+        catch (PDOException $e) {
+            // echo $e->getMessage();
+            // if there is a specific SQL-related error message
+            //    echo "generic message (don't reveal SQL-specific message)";
+
+            if (strpos($e->getMessage(), "Duplicate")){
+                echo "Failed to add a script <br/>";
+            }
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    function get_all_scripts() {
+        $query = "SELECT * FROM scripts";
+        $statement = $this->pdo->prepare($query);
+        $statement->execute();
+        $result = $statement->fetchAll();   // fetch()
+        return $result;
     }
 
 

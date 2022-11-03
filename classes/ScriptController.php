@@ -50,6 +50,8 @@ class ScriptController {
 
     // Manages the home page
     public function home() {
+
+        $list_of_scripts = $this->db->get_all_scripts();
     
         include "templates/home.php";
     }
@@ -105,6 +107,24 @@ class ScriptController {
     }
 
     public function scriptPost() {
+        // echo "<pre>";
+        //     print_r($_POST);
+        // echo "</pre>";
+        if (isset($_POST["script"])) { 
+
+            $insert = $this->db->post_new_script($_POST["title"], $_POST["description"], 
+                $_POST["script"], $_POST["genre"], $_SESSION["id"]);
+
+            // Checks if something went wrong adding the script.
+            if ($insert === false) {
+                    $message = "<div class='alert alert-danger'>Error inserting new user.</div>";
+                }
+            else {
+                // all went well
+                echo "Script accepted!";
+            }
+        } 
+
         include "templates/script_post.php";
     }
 
