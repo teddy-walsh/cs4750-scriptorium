@@ -55,7 +55,7 @@ class Database {
             $statement->bindValue(':username', $username);
             $statement->bindValue(':password', password_hash($password, PASSWORD_DEFAULT));
             $statement->execute();
-            echo "Successfully added new user";
+            //echo "Successfully added new user";
 
             // if ($statement->rowCount() == 0) {
             //     echo "Failed to add a friend <br/>";
@@ -107,7 +107,7 @@ class Database {
                     $_SESSION["id"] = $user["user_id"];
                     header("Location: ?command=home");
             } else {
-                echo "Not good";
+                //echo "Not good";
                 return false; // gives the error message of unable to authenticate
             }
         }

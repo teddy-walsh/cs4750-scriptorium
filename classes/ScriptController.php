@@ -91,7 +91,7 @@ class ScriptController {
             } else {
                 // create a new user
                 $insert = $this->db->add_user($_POST["email"], $_POST["username"], 
-                                    password_hash($_POST["password"], PASSWORD_DEFAULT));
+                                    password_hash($_POST["password"], PASSWORD_BCRYPT));
 
                 if ($insert === false) {
                     $message = "<div class='alert alert-danger'>Error inserting new user.</div>";
