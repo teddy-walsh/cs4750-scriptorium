@@ -1,7 +1,24 @@
-runtime: php81
+runtime: php81 # Replace with php74 to use PHP 7.4
 
-# Defaults to "serve public/index.php" and "serve index.php". Can be used to
-# serve a custom PHP front controller (e.g. "serve backend/index.php") or to
-# run a long-running PHP script as a worker process (e.g. "php worker.php").
-#
-# entrypoint: serve index.php
+handlers:
+# Serve a directory as a static resource.
+- url: /stylesheets
+  static_dir: stylesheets
+
+
+# Serve images as static resources.
+- url: /(.+\.(gif|png|jpg))$
+  static_files: \1
+  upload: .+\.(gif|png|jpg)$
+
+# Serve your app through a front controller at index.php or public/index.php.
+- url: .*
+  script: auto
+
+# Remember - storing secrets in plaintext is potentially unsafe. Consider using
+# something like https://cloud.google.com/secret-manager/ to help keep secrets secret.
+env_variables:
+  INSTANCE_UNIX_SOCKET: /cloudsql/cs4750scriptorium:us-east4:scriptorium-home
+  DB_USER: root
+  DB_PASS: vHdgxfiy+BLZp!8T6
+  DB_NAME: sciptorium
