@@ -26,15 +26,16 @@ class Database {
             echo "Reached here";
             // Connect to the database.
             $this->pdo = new PDO($dsn, $username, $password,
-                # [START_EXCLUDE]
-                // Here we set the connection timeout to five seconds and ask PDO to
-                // throw an exception if any errors occur.
-                [
-                    PDO::ATTR_TIMEOUT => 5,
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                ]
-                # [END_EXCLUDE]
+                // # [START_EXCLUDE]
+                // // Here we set the connection timeout to five seconds and ask PDO to
+                // // throw an exception if any errors occur.
+                // [
+                //     PDO::ATTR_TIMEOUT => 5,
+                //     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                // ]
+                // # [END_EXCLUDE]
             );
+            echp "Trying to get here";
             echo "<p>You are connected to the database --- host=$host</p>";
         } catch (TypeError $e) {
             throw new RuntimeException(
