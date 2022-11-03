@@ -4,6 +4,12 @@
     require 'styles/head_style.php'; 
     ?>
 
+    <?php 
+    if(!(isset($_SESSION["id"]))) { // if the user is not logged in, send them to the login page
+        header("Location: ?command=login");
+    }
+    ?>
+
     <div class="d-flex justify-content-center">
       <div class="script-form">
         <form action="?command=script-post" method="post">

@@ -107,9 +107,6 @@ class ScriptController {
     }
 
     public function scriptPost() {
-    if(!(isset($_SESSION["id"]))) { // if the user is not logged in, send them to the login page
-        header("Location: ?command=login");
-    } else {
         // echo "<pre>";
         //     print_r($_POST);
         // echo "</pre>";
@@ -129,7 +126,6 @@ class ScriptController {
         } 
 
         include "templates/script_post.php";
-    }
     }
 
 

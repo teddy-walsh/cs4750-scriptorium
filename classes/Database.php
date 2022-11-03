@@ -8,6 +8,7 @@ class Database {
             $password = getenv('DB_PASS');
             $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium"; 
 
+
         try {
             // Connect to the database.
             $this->pdo = new PDO($dsn, $username, $password);

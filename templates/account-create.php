@@ -48,7 +48,6 @@
                     <a href="?command=logout" class="btn btn-danger cancel">Cancel</a>
                     </div>
                 </form>
-                    <!-- Still regex if JavaScript is disabled -->
                                 <?php
                     if (!empty($message)) {
                         echo $message;
