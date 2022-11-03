@@ -68,6 +68,7 @@ class Database {
             $statement->bindValue(':username', $_POST["username"]);
             $statement->bindValue(':password', password_hash($_POST["password"], PASSWORD_DEFAULT));
             $statement->execute();
+            echo "Making it to here";
 
             if ($statement->rowCount() == 0)
                 echo "Failed to add a friend <br/>";
