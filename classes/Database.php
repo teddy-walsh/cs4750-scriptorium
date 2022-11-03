@@ -60,9 +60,11 @@ class Database {
             $statement = $this->pdo->prepare($query);
             $statement->bindValue(':email', $email);
             $statement->bindValue(':username', $username);
-            $statement->bindValue(':password', password_hash($password, PASSWORD_DEFAULT));
+            $password = password_hash($password, PASSWORD_DEFAULT);
+            $statement->bindValue(':password', $password);
             $statement->execute();
-            //echo "Successfully added new user";
+            echo "Successfully added new user";
+            echo $password;
 
             // if ($statement->rowCount() == 0) {
             //     echo "Failed to add a friend <br/>";
@@ -109,6 +111,7 @@ class Database {
                 print_r($password);
             echo "</pre>";
             echo password_hash($password, PASSWORD_DEFAULT);
+
             echo $user["password"];
 
             if (password_verify($password, $user["password"])) { // pw good?
