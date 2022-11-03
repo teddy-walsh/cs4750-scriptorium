@@ -19,6 +19,7 @@ class Database {
                // $dsn = "mysql:host=$host;dbname=$dbname"; 
         try {
             // Connect to the database.
+            echo "Making it to the try";
             $this->pdo = new PDO($dsn, $username, $password,
                 // # [START_EXCLUDE]
                 // // Here we set the connection timeout to five seconds and ask PDO to
