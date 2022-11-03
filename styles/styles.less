@@ -1,0 +1,301 @@
+@color-green: #BDD9BF;
+@color-grey: #929084;
+@color-yellow: #FFC857;
+@color-purple: #A997DF;
+@color-red: #E5323B;
+@color-navy: #2E4052;
+@color-dk-bkgrnd: #2E4042;
+
+body {
+	background-color: #2e4042;
+	margin: 0px;
+}
+
+a {
+	color: black;
+}
+
+/*Header Elements*/
+.header-row {
+	background-color: #bdd9bf;
+	display: flex;
+	justify-content: space-between;
+}
+
+.login-button {
+	padding: 0px;
+	float: right;
+	text-align: right;
+	border-radius: 0.75rem;
+}
+
+.home-button {
+	padding: 0px;
+	float: left;
+}
+
+.btn-warning {
+	background-color: #ffc857;
+	border-color: #ffc857;
+}
+
+.question-block {
+	padding: 2% 2%;
+}
+
+.question {
+	background-color: #bdd9bf;
+	border-radius: 0.25rem;
+	width: 50%;
+	padding: 3% 10%;
+	margin: auto;
+	text-align: center;
+	font-size: 1.5 rem;
+	line-height: 1.5;
+}
+
+options button {
+	margin: 0;
+}
+
+.option-1 {
+	background-color: #bdd9bf;
+}
+
+.option-2 {
+	background-color: #929084;
+}
+
+.option-3 {
+	background-color: #ffc857;
+}
+
+.option-4 {
+	background-color: #a997df;
+}
+
+.option-5 {
+	background-color: #e5323b;
+}
+.option-6 {
+	background-color: #929084;
+}
+
+/*Quiz Code*/
+.alert-box {
+	text-align: center;
+}
+
+.alert {
+	margin-left: auto;
+	margin-right: auto;
+	width: 40%;
+}
+
+.quiz-code-block {
+	padding: 11% 0%;
+	background-color: #2e4042;
+	text-align: center;
+}
+
+.btn-success {
+	background-color: #bdd9bf;
+	border-color: #bdd9bf;
+	color: #2e4042 !important;
+}
+
+.quiz-button {
+	background-color: #bdd9bf;
+	padding: 5% 0%;
+	color: black;
+	text-align: center;
+	font-size: 3rem;
+	margin-bottom: 10px;
+}
+
+.code-textbox {
+	font-size: 3rem;
+	text-align: center;
+}
+
+#quiz-wait {
+	display: none;
+}
+
+/*Login Tasks*/
+
+.main {
+	background-color: @color-green;
+	border-radius: 15px;
+	padding: 0 0 3% 0;
+}
+
+.login-banner {
+	text-align: center;
+	padding: 2% 5% 0 5%;
+	margin: 40px 0 10px 0;
+}
+
+.logout {
+	position:absolute;                 
+	top:0;                         
+	right:0; 
+}
+
+.cancel {
+	margin-left: 15%;
+}
+
+/*User Tasks*/
+
+.sidebar {
+	background-color: #929084;
+}
+
+.middle-inner-top {
+	background-color: #bdd9bf;
+	margin: 2% 2% 0% 2%;
+}
+
+.icon {
+	margin: auto;
+	vertical-align: middle;
+}
+
+.red-x {
+	text-align: right;
+	font-size: 1.5rem;
+}
+
+.red-x > a {
+	text-decoration: none;
+}
+
+.middle-inner-bottom {
+	margin: 0% 2% 2% 2%;
+	background-color: #929084;
+}
+
+.working-outer {
+	margin: 1% 0%;
+	padding: 1%;
+	background-color: #bdd9bf;
+}
+
+.addon-boxes {
+	padding: 1%;
+}
+
+.tags-box {
+	background-color: #a997df;
+	margin-bottom: 10px;
+}
+
+.class-box {
+	background-color: #a997df;
+}
+
+.add-question-box {
+	background-color: #a997df;
+	margin: 1%;
+}
+
+.question-addons {
+	margin: 1% 0%;
+}
+
+.question-addons button {
+	margin: 2%;
+	text-align: center;
+}
+
+.question-entry {
+	text-align: center;
+	padding: 1%;
+}
+
+.answer-block {
+	padding: 1%;
+	margin: 0.5rem;
+}
+
+.answer-row {
+	margin: 1%;
+	padding-right: 2%;
+}
+
+.input-group-prepend {
+	width: 100%;
+}
+
+/*Quiz Result*/
+
+.chart-row {
+	margin: 0 auto;
+}
+
+.quiz-results {
+	text-align: center;
+	color: white;
+	margin-top: 2%;
+
+	h1 {
+		font-weight: bold;
+	}
+}
+
+.chart-container {
+	text-align: center;
+}
+
+
+
+/*Footer*/
+.footer {
+	background-color: #bdd9bf;
+	text-align: center;
+	padding: 20px 0 20px 0; /*Changes height of footer*/
+	position: relative; /* Puts the footer at the bottom for wide phones and bigger;*/
+	bottom: 0;
+}
+
+.footer a {
+	color: black;
+	text-decoration: none;
+}
+
+.footer a:hover {
+	color: seagreen;
+	text-decoration: underline;
+}
+
+@media only screen and (min-width: 768px) {
+	.quiz-code-block {
+		padding: 10% 30%;
+	}
+	.quiz-button {
+		padding: 5% 20%;
+	}
+
+	.question-block {
+		padding: 1% 30%;
+	}
+
+	.question {
+		padding: 3% 10%;
+	}
+	.input-group-prepend {
+		width: auto;
+	}
+
+	/*Changes the width of question buttons*/
+	options button {
+		margin: 0 300px;
+	}
+
+	.chart-container {
+	position: relative; 
+	height:40vh; 
+	width:40vw;
+	}
+}
