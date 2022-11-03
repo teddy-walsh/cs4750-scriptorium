@@ -10,18 +10,13 @@ class Database {
             $instanceUnixSocket = getenv('INSTANCE_UNIX_SOCKET'); // e.g. '/cloudsql/project:region:instance'
 
             // Connect using UNIX sockets
-            $dsn = sprintf(
-                'mysql:dbname=%s;unix_socket=%s',
-                $dbName,
-                $instanceUnixSocket
-            );
+            $dsn = "mysql:unix_socket=$instanceUnixSocket;dbname=$dbname";
 
                // $username = 'root';
-               // $password = '';
-               // $host = 'localhost:3306';
+               // $password = 'vHdgxfiy+BLZp!8T6';
+               // $host = '34.145.156.4';
                // $dbname = 'scriptorium';
                // $dsn = "mysql:host=$host;dbname=$dbname"; 
-
         try {
             echo "Reached here";
             // Connect to the database.
@@ -35,7 +30,7 @@ class Database {
                 // ]
                 // # [END_EXCLUDE]
             );
-            echp "Trying to get here";
+            echo "Trying to get here";
             echo "<p>You are connected to the database --- host=$host</p>";
         } catch (TypeError $e) {
             throw new RuntimeException(
