@@ -1,13 +1,7 @@
 <?php
-    $title = "Welcome to Scriptorium";
-    $description = 'Welcome to Scriptorium';
+    $title = "Scriptorium - Post a New Script";
+    $description = "Post a new script";
     require 'styles/head_style.php'; 
-    ?>
-
-    <?php 
-    if(!(isset($_SESSION["id"]))) { // if the user is not logged in, send them to the login page
-        header("Location: ?command=login");
-    }
     ?>
 
     <div class="d-flex justify-content-center">
