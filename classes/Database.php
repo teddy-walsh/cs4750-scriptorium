@@ -7,7 +7,7 @@ class Database {
             $username = getenv('DB_USER');
             $password = getenv('DB_PASS');
             $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium"; 
-            
+
         try {
             // Connect to the database.
             $this->pdo = new PDO($dsn, $username, $password);
@@ -85,6 +85,28 @@ class Database {
         $statement->execute();
         $result = $statement->fetch();
         return $result; 
+    }
+
+    function user_login($username, $password) {
+        $query = "SELECT * FROM users WHERE (display_name=:username)";
+        $statement = $this->pdo->prepare($query);
+        $statement->bindValue(':username', $username);
+        $statement->execute();
+        $user = $statement->fetch();
+
+        if (!empty($user)) { // it found the user
+            // echo "<pre>";
+            //     print_r($user);
+            // echo "</pre>";
+            if (password_verify($password, $user["password"])) { // pw good?
+                    $_SESSION["username"] = $user["display_name"];
+                    $_SESSION["id"] = $user["user_id"];
+                    header("Location: ?command=home");
+            } else {
+                return false; // gives the error message of unable to authenticate
+            }
+        }
+
     }
 
 

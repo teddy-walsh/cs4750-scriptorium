@@ -1,7 +1,5 @@
 <?php
 
-// include "db-connect.php";
-
 class ScriptController {
 
 	private $command;
@@ -56,6 +54,14 @@ class ScriptController {
 
     // Manage the page for the login page
     public function login() {
+        if (isset($_POST["username"])) {
+            $authenticate = $this->db->user_login($_POST["username"], $_POST["password"]);
+            if ($authenticate) {
+                echo "Welcome";
+            } else {
+                $message = "<div class='alert alert-danger'>Unable to authenticate.</div>";
+            }
+        }
     
         include "templates/login.php";
     }
@@ -79,8 +85,6 @@ class ScriptController {
                     </div>";
             } else {
                 // create a new user
-                $query = "INSERT INTO users(email, display_name, password)
-                            VALUES (:email, :username, :password)";
                 $insert = $this->db->add_user($_POST["email"], $_POST["username"], 
                                     password_hash($_POST["password"], PASSWORD_DEFAULT));
 

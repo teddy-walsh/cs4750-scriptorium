@@ -55,8 +55,20 @@
             </form>
 
             <div class="text-end">
-                <a href="?command=login" class="btn btn-outline-light me-2" role="button">Login</a>
-                <a href="?command=account-create" class="btn btn-warning" role="button">Sign-up</a>
+                <?php 
+                    if(!isset($_SESSION['id'])){ // if the user is not logged in, show the two buttons
+                        echo <<< EOT
+                            <a href="?command=login" class="btn btn-outline-light me-2" role="button">Login</a>
+                            <a href="?command=account-create" class="btn btn-warning" role="button">Sign-up</a>
+                        EOT;
+                    } else {
+                        echo <<< EOT
+                            <a href="?command=logout" class="btn btn-danger" role="button">Logout</a>
+                        EOT;
+                    }
+                ?>
+
+
             </div>
           </div>
         </div>
