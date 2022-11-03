@@ -1,23 +1,20 @@
-<?php 
-session_start();
+<?php
 
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-// Makes sure the data tables exist.
-require "setup.php";
-
-// Register the autoloader
-spl_autoload_register(function($classname) {
-    include "classes/$classname.php";
-});
-
-// Parse the query string for command
-$command = "home";
-if (isset($_GET["command"]))
-    $command = $_GET["command"];
-
-// Instantiate the controller and run
-$scriptorium = new ScriptController($command);
-$scriptorium->run();
-
-echo "Hellooooooo";
+/**
+ * This is an example of a front controller for a flat file PHP site. Using a
+ * Static list provides security against URL injection by default. See README.md
+ * for more examples.
+ */
+# [START gae_simple_front_controller]
+switch (@parse_url($_SERVER['REQUEST_URI'])['path']) {
+    case '/':
+        require 'homepage.php';
+        break;
+    case '/contact.php':
+        require 'contact.php';
+        break;
+    default:
+        http_response_code(404);
+        exit('Not Found');
+}
+# [END gae_simple_front_controller]
