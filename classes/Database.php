@@ -13,8 +13,8 @@ class Database {
             // $dsn = "mysql:unix_socket=$instanceUnixSocket;dbname=$dbname";
 
 
-               $username = 'root';
-               $password = 'vHdgxfiy+BLZp!8T6';
+               $username = getenv('DB_USER');
+               $password = getenv('DB_PASS');
                $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium"; 
 
                echo getenv('DB_USER');
