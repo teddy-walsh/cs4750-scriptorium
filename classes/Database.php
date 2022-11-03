@@ -13,17 +13,17 @@ class Database {
             // $dsn = "mysql:unix_socket=$instanceUnixSocket;dbname=$dbname";
 
 
-               // $username = 'root';
-               // $password = 'vHdgxfiy+BLZp!8T6';
-               // $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium"; 
+               $username = 'root';
+               $password = 'vHdgxfiy+BLZp!8T6';
+               $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium"; 
 
                echo getenv('DB_USER');
 
-               $username = 'root';
-               $password = 'vHdgxfiy+BLZp!8T6';
-               $host = '34.145.156.4';
-               $dbname = 'scriptorium';
-               $dsn = "mysql:host=$host;dbname=$dbname"; 
+               // $username = 'root';
+               // $password = 'vHdgxfiy+BLZp!8T6';
+               // $host = '34.145.156.4';
+               // $dbname = 'scriptorium';
+               // $dsn = "mysql:host=$host;dbname=$dbname"; 
 
                echo getenv('DB_USER');
         try {
