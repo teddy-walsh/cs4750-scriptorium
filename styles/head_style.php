@@ -17,12 +17,12 @@
 
 
         <!-- LESS -->
-        <link rel="stylesheet/less" type="text/css" href="styles/styles.less" />
-        <script src="https://cdn.jsdelivr.net/npm/less" ></script>
+<!--         <link rel="stylesheet/less" type="text/css" href="styles/styles.less" />
+        <script src="https://cdn.jsdelivr.net/npm/less" ></script> -->
         <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
 
         <!-- CSS Stylesheet -->
-        <!-- <link rel="stylesheet" href="./styles/styles.css"> -->
+        <link rel="stylesheet" href="./styles/styles.css">
     </head>
 <body>
 
