@@ -4,37 +4,18 @@ class Database {
     private $pdo;
 
     public function __construct() {
-            $username = getenv('DB_USER'); // e.g. 'your_db_user'
-            $password = getenv('DB_PASS'); // e.g. 'your_db_password'
-            // $dbname = getenv('DB_NAME'); // e.g. 'your_db_name'
-            // $instanceUnixSocket = getenv('INSTANCE_UNIX_SOCKET'); // e.g. '/cloudsql/project:region:instance'
-
+            $username = getenv('DB_USER');
+            $password = getenv('DB_PASS');
             $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium"; 
-
-               echo getenv('DB_USER');
-
-               // $username = 'root';
-               // $password = 'vHdgxfiy+BLZp!8T6';
-               // $host = '34.145.156.4';
-               // $dbname = 'scriptorium';
-               // $dsn = "mysql:host=$host;dbname=$dbname"; 
-
-               echo getenv('DB_USER');
+            
         try {
             // Connect to the database.
-            echo "Making it to the try" . getenv('DB_USER');
-            $this->pdo = new PDO($dsn, $username, $password,
-                // # [START_EXCLUDE]
-                // // Here we set the connection timeout to five seconds and ask PDO to
-                // // throw an exception if any errors occur.
-                // [
-                //     PDO::ATTR_TIMEOUT => 5,
-                //     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                // ]
-                // # [END_EXCLUDE]
-            );
+            $this->pdo = new PDO($dsn, $username, $password);
+
+            // Sets warning messages to ON
             $this->pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
-            echo "<p>You are connected to the database</p>";
+
+            //echo "<p>You are connected to the database</p>";
         } catch (TypeError $e) {
             throw new RuntimeException(
                 sprintf(
@@ -63,22 +44,24 @@ class Database {
         }
     }
 
+    // Adds new accounts via the sign-up page
     function add_user($email, $username, $password) {
+        // var_dump($_POST);
         $query = "INSERT INTO users(email, display_name, password) 
                     VALUES (:email, :username, :password)";
-        echo "Making it to add_user";
-        var_dump($_POST);
         try {
             $statement = $this->pdo->prepare($query);
             $statement->bindValue(':email', $_POST["email"]);
             $statement->bindValue(':username', $_POST["username"]);
             $statement->bindValue(':password', password_hash($_POST["password"], PASSWORD_DEFAULT));
             $statement->execute();
-            echo "Making it to here";
+            //echo "Successfully added new user";
 
-            if ($statement->rowCount() == 0)
-                echo "Failed to add a friend <br/>";
-            return true;
+            // if ($statement->rowCount() == 0) {
+            //     echo "Failed to add a friend <br/>";
+            // }
+
+            return true; // this gets checked on the sign-up page to then log in the new user
         }
         catch (PDOException $e) {
             // echo $e->getMessage();
@@ -94,6 +77,7 @@ class Database {
         }
     }
 
+    // returns the user_id for a particular username
     function get_user_id($username) {
         $query = "SELECT user_id FROM users WHERE (display_name=:username)";
         $statement = $this->pdo->prepare($query);

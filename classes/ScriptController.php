@@ -91,6 +91,9 @@ class ScriptController {
                     $_SESSION["username"] = $_POST["username"];
                     $_SESSION["id"] = $new_id[0];;
                 }
+
+                echo "Welcome, " . $_SESSION["username"] . "!";
+                echo "You are User #" . $_SESSION["id"];
             }
         }
         include "templates/account-create.php";
