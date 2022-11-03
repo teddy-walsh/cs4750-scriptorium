@@ -1,8 +1,3 @@
-/* @color1: #F0E5CF;
-@color2: #F7F6F2;
-@color3: #C8C6C6;
-@color4: #4B6587;*/
-
 body {
 	background-color: #F0E5CF;
 	margin: 0px;
@@ -18,5 +13,5 @@ a {
 
 
 @media only screen and (min-width: 768px) {
-
+	background-color: black;
 }
