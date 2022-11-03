@@ -10,7 +10,11 @@ class Database {
             $instanceUnixSocket = getenv('INSTANCE_UNIX_SOCKET'); // e.g. '/cloudsql/project:region:instance'
 
             // Connect using UNIX sockets
-            $dsn = "mysql:unix_socket=$instanceUnixSocket;dbname=$dbname";
+            $dsn = sprintf(
+                'mysql:dbname=%s;unix_socket=%s',
+                $dbName,
+                $instanceUnixSocket
+            );
 
                // $username = 'root';
                // $password = 'vHdgxfiy+BLZp!8T6';
@@ -60,8 +64,8 @@ class Database {
     }
 
     function add_user($email, $username, $password) {
-        $query = "INSERT INTO users(email, display_name, password)
-                            VALUES (:email, :username, :password)";
+        $query = "INSERT INTO users(email, display_name, password) 
+                    VALUES (:email, :username, :password)";
         echo "Making it to add_user";
         var_dump($_POST);
         try {
