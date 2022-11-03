@@ -8,7 +8,6 @@ class Database {
             $password = getenv('DB_PASS');
             $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium"; 
 
-
         try {
             // Connect to the database.
             $this->pdo = new PDO($dsn, $username, $password);
@@ -56,7 +55,7 @@ class Database {
             $statement->bindValue(':username', $username);
             $statement->bindValue(':password', password_hash($password, PASSWORD_DEFAULT));
             $statement->execute();
-            //echo "Successfully added new user";
+            echo "Successfully added new user";
 
             // if ($statement->rowCount() == 0) {
             //     echo "Failed to add a friend <br/>";
@@ -99,11 +98,16 @@ class Database {
             // echo "<pre>";
             //     print_r($user);
             // echo "</pre>";
+            // echo "<pre>";
+            //     print_r($password);
+            // echo "</pre>";
+
             if (password_verify($password, $user["password"])) { // pw good?
                     $_SESSION["username"] = $user["display_name"];
                     $_SESSION["id"] = $user["user_id"];
                     header("Location: ?command=home");
             } else {
+                echo "Not good";
                 return false; // gives the error message of unable to authenticate
             }
         }

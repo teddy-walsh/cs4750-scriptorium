@@ -97,8 +97,9 @@ class ScriptController {
                     $message = "<div class='alert alert-danger'>Error inserting new user.</div>";
                 } else { // user successfully created
                     $new_id = $this->db->get_user_id($_POST["username"]);
+                    // var_dump($new_id);
                     $_SESSION["username"] = $_POST["username"];
-                    $_SESSION["id"] = $new_id["id"];
+                    $_SESSION["id"] = $new_id["user_id"];
                     header("Location: ?command=home");
                 }
             }
