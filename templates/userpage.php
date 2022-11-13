@@ -1,19 +1,31 @@
 <?php
-    $title = "Welcome to Scriptorium";
-    $description = 'Welcome to Scriptorium';
+    $title = "Userpage";
+    $description = 'Userpage';
     require 'styles/head_style.php';
     ?>
 
-<?php 
-    if(isset($_SESSION["id"])){ // if the user is logged in
-        echo "<div><p>Welcome back, " . $_SESSION["username"] . "!";
-    }
-  ?>
-  
 <section>
-<h3>List of Scripts</h3>
+    <div class="container-fluid fp-script-box">
+    	<div class="col-md-12 up-name">
+    		<h2><?php echo($info["display_name"]); ?></h2>
+    	</div>
+    	<div class="row">
+    		<div class="col-md-12 up-bio">
+    			<p><?php echo($info["bio"]); ?></p>
+    		</div>
+    	</div>
+    	<div class="row">
+    		<div class="col-md-12 up-url">
+                <?php $userurl = $info["URL"]; ?>
+    			<span><a href="<?php echo $userurl; ?>"><?php echo $userurl; ?></a></span>
+    		</div>
+    	</div>
+    </div>
+</section>
 
-  <?php foreach ($home_page_filler as $script_info): ?>
+<section>
+<h3>All of my Scripts</h3>
+  <?php foreach ($list_of_scripts as $script_info): ?>
 
     <div class="container-fluid fp-script-box">
       <div class="row">
@@ -33,13 +45,9 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-3 fp-readmore">
+        <div class="col-md-12 fp-readmore">
           <?php $scriptlink = "?command=fullscript&script=".$script_info['script_id']; ?>
           <span><a href="<?php echo $scriptlink; ?>">Read more ⟶</a></span>
-        </div>
-        <div class="col-md-9 fp-author">
-          <?php $userlink = "?command=userpage&user=".$script_info['user_id']; ?>
-          <span><a href="<?php echo $userlink; ?>"><?php echo $script_info["display_name"]; ?></a></span>
         </div>
       </div>
     </div>
@@ -47,4 +55,5 @@
     <?php endforeach; ?>
 </section>
 
-<?php require 'styles/foot_style.php'; ?>
+
+<?php require 'styles/foot_style.php'; ?>		

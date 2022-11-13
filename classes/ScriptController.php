@@ -19,7 +19,13 @@ class ScriptController {
                 $this->accountCreate();
                 break;
             case "script-post":
-                $this->scriptPost();
+                $this->newScriptPost();
+                break;
+            case "test":
+                $this->test();
+                break;
+            case "userpage":
+                $this->userpage();
                 break;
             case "logout":
                 $this->destroySession();
@@ -50,12 +56,40 @@ class ScriptController {
 
     // Manages the home page
     public function home() {
-
         $list_of_scripts = $this->db->get_all_scripts();
-    
+        $list_of_users = $this->db->get_all_users();
+        $joiner = $this->db->get_all_user_created();
+
+        $home_page_filler = [];
+        foreach ($joiner as $item) {
+            $sid = intval($item["script_id"]);
+            $uid = intval($item["user_id"]);
+            $temp = [];
+
+            foreach ($list_of_users as $user) {
+                if (intval($user["user_id"]) == $uid) {
+                    //add to the temp.
+                    $temp["display_name"] = $user["display_name"];
+                    $temp["user_id"] = $user["user_id"];
+                }
+            }
+
+            foreach ($list_of_scripts as $script) {
+                if (intval($script["script_id"]) == $sid) {
+                    // //add to the temp.
+                    $temp["title"] = $script["title"];
+                    $temp["blurb"] = $script["blurb"];
+                    $temp["genre"] = $script["genre"];
+                    $temp["datetime"] = $script["datetime"];
+                    $temp["script_id"] = $script["script_id"];
+                }
+            }
+
+            // add the temp to the overall array
+            array_push($home_page_filler, $temp);
+        }
         include "templates/home.php";
     }
-
 
     // Manage the page for the login page
     public function login() {
@@ -106,7 +140,7 @@ class ScriptController {
         include "templates/account-create.php";
     }
 
-    public function scriptPost() {
+    public function newScriptPost() {
         // echo "<pre>";
         //     print_r($_POST);
         // echo "</pre>";
@@ -115,17 +149,49 @@ class ScriptController {
             $insert = $this->db->post_new_script($_POST["title"], $_POST["description"], 
                 $_POST["script"], $_POST["genre"], $_SESSION["id"]);
 
-            // Checks if something went wrong adding the script.
+            // Checks if something went wrong adding the script. Currently since it's POST
+            // it will delete all the input if something goes wrong. Less than ideal.
             if ($insert === false) {
-                    $message = "<div class='alert alert-danger'>Error inserting new user.</div>";
+                    $message = "<div class='alert alert-danger'>Error inserting new script.</div>";
                 }
             else {
                 // all went well
-                echo "Script accepted!";
+                $message = "<div class='alert alert-success'>Script successfully inserted.</div>";
             }
         } 
 
         include "templates/script_post.php";
+    }
+
+    public function userpage() {
+        //check to see if they are properly accessing a userpage
+        //should probably check to make sure user is an int
+        $info = [];
+        if (isset($_GET["user"])) { 
+            $user_details = $this->db->get_userpage_info($_GET["user"]);
+            $user_name = $this->db->get_user_displayname($_GET["user"]);
+            if (!empty($user_details)) { // it found the user in userpage
+                $info = $user_details;
+            }
+            if (!empty($user_name)) { // it found the user in users
+                $info["display_name"] = $user_name;
+            }
+
+            // populate their list of scripts
+            $list_of_scripts = $this->db->get_all_scripts_by_user($_GET["user"]);
+
+        } else { //GET not set
+            header("Location: ?command=home");
+        }
+
+
+    
+        include "templates/userpage.php";
+    }
+
+    public function test() {
+    
+        include "templates/test.php";
     }
 
 

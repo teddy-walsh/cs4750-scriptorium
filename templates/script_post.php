@@ -17,9 +17,6 @@
           <div class="form-group">
             <div class="row">
 
-            <!--   Can replace the values with php if ($script_to_update != null) echo  -->
-            <!-- $script_to_update["title"]  LATER -->
-
               <div class="col"><label id="title" name="title">Title
                   <input type="text" class="form-control" name="title" required 
                   value="Title">
@@ -48,7 +45,6 @@
           
           <div class="form-group">
             <input type="submit" class="btn btn-md" id="submit" name="myBtn1" value="Save">
-            <!-- <input class="btn btn-md" id="myBtn" name="myBtn2" value="Post!"> -->
           </div>
         </form>
       </div>

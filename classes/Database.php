@@ -1,7 +1,7 @@
 <?php
 class Database {
 
-    private $pdo;
+    private $db;
 
     public function __construct() {
             $username = getenv('DB_USER');
@@ -10,10 +10,10 @@ class Database {
 
         try {
             // Connect to the database.
-            $this->pdo = new PDO($dsn, $username, $password);
+            $this->db = new PDO($dsn, $username, $password);
 
             // Sets warning messages to ON
-            $this->pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
+            $this->db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );
 
             //echo "<p>You are connected to the database</p>";
         } catch (TypeError $e) {
@@ -50,7 +50,7 @@ class Database {
         $query = "INSERT INTO users(email, display_name, password) 
                     VALUES (:email, :username, :password)";
         try {
-            $statement = $this->pdo->prepare($query);
+            $statement = $this->db->prepare($query);
             $statement->bindValue(':email', $email);
             $statement->bindValue(':username', $username);
             $statement->bindValue(':password', password_hash($password, PASSWORD_DEFAULT));
@@ -80,7 +80,7 @@ class Database {
     // returns the user_id for a particular username
     function get_user_id($username) {
         $query = "SELECT user_id FROM users WHERE (display_name=:username)";
-        $statement = $this->pdo->prepare($query);
+        $statement = $this->db->prepare($query);
         $statement->bindValue(':username', $username);
         $statement->execute();
         $result = $statement->fetch();
@@ -89,47 +89,74 @@ class Database {
 
     function user_login($username, $password) {
         $query = "SELECT * FROM users WHERE (display_name=:username)";
-        $statement = $this->pdo->prepare($query);
+        $statement = $this->db->prepare($query);
         $statement->bindValue(':username', $username);
         $statement->execute();
         $user = $statement->fetch();
 
         if (!empty($user)) { // it found the user
-            // echo "<pre>";
-            //     print_r($user);
-            // echo "</pre>";
-            // echo "<pre>";
-            //     print_r($password);
-            // echo "</pre>";
-            // echo password_hash($password, PASSWORD_DEFAULT);
-
-            // echo $user["password"];
 
             if (password_verify($password, $user["password"])) { // pw good?
                     $_SESSION["username"] = $user["display_name"];
                     $_SESSION["id"] = $user["user_id"];
                     header("Location: ?command=home");
             } else {
-                //echo "Not good";
                 return false; // gives the error message of unable to authenticate
             }
         }
 
     }
 
-    // TODO Fill the foreign key table as well
+    // Handles the submission of new scripts
     function post_new_script($title, $blurb, $script, $genre, $user_id) {
         $query = "INSERT INTO scripts(title, blurb, script_body, genre) 
                     VALUES (:title, :blurb, :script, :genre)";
         try {
-            $statement = $this->pdo->prepare($query);
+            $statement = $this->db->prepare($query);
             $statement->bindValue(':title', $title);
             $statement->bindValue(':blurb', $blurb);
             $statement->bindValue(':script', $script);
             $statement->bindValue(':genre', $genre);
             $statement->execute();
+            $new_script_id = $this->db->lastInsertId();
 
-            return true; // this gets checked on the sign-up page to then log in the new user
+            //since the script insert was successful, try to update the user_created table, too
+            $update_results = $this->update_user_created($user_id, $new_script_id);
+
+            //var_dump($update_results);
+            // Let the controller know if the script was inserted AND the user_created table updated
+            if ($update_results) {
+                return true;
+            } else {
+                return false;
+            }
+            
+
+        }
+        catch (PDOException $e) {
+            // echo $e->getMessage();
+            // if there is a specific SQL-related error message
+            //    echo "generic message (don't reveal SQL-specific message)";
+
+            if (strpos($e->getMessage(), "Duplicate")){
+                echo "Failed to add a script <br/>";
+            }
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    function update_user_created($user_id, $new_script_id) {
+        $query = "INSERT INTO user_created(user_id, script_id) 
+                    VALUES (:user_id, :new_script_id)";
+        try {
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':user_id', $user_id);
+            $statement->bindValue(':new_script_id', $new_script_id);
+            $statement->execute();
+            // will report back to post_new_scripts to confirm the whole process worked
+            return true; 
         }
         catch (PDOException $e) {
             // echo $e->getMessage();
@@ -147,11 +174,61 @@ class Database {
 
     function get_all_scripts() {
         $query = "SELECT * FROM scripts";
-        $statement = $this->pdo->prepare($query);
+        $statement = $this->db->prepare($query);
         $statement->execute();
         $result = $statement->fetchAll();   // fetch()
         return $result;
     }
 
+    function get_all_scripts_by_user($user_id) {
+        $query = "SELECT * FROM scripts NATURAL JOIN user_created WHERE (user_id=:uid)";
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':uid', $user_id);
+        $statement->execute();
+        $scripts = $statement->fetchAll();
+
+        if (!empty($scripts)) { // it found the user's scripts
+            return $scripts;
+        }
+    }
+
+    function get_all_users() {
+        $query = "SELECT user_id, display_name FROM users";
+        $statement = $this->db->prepare($query);
+        $statement->execute();
+        $result = $statement->fetchAll();   // fetch()
+        return $result;
+    }
+
+    function get_all_user_created() {
+        $query = "SELECT * FROM user_created";
+        $statement = $this->db->prepare($query);
+        $statement->execute();
+        $result = $statement->fetchAll();   // fetch()
+        return $result;
+    }
+
+    function get_userpage_info($user_id) {
+        $query = "SELECT * FROM userpage WHERE (user_id=:uid)";
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':uid', $user_id);
+        $statement->execute();
+        $user = $statement->fetch();
+
+        if (!empty($user)) { // it found the user
+            return $user;
+        } 
+    }
+
+    function get_user_displayname($user_id) {
+        $query = "SELECT display_name FROM users WHERE (user_id=:uid)";
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':uid', $user_id);
+        $statement->execute();
+        $user = $statement->fetch();
+        if (!empty($user)) { // it found the user
+            return $user["display_name"];
+        } 
+    }
 
 }

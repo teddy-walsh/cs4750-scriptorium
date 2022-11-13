@@ -200,3 +200,44 @@ body {
 label {
   font-size: 20px;
 }
+
+section {
+  margin:  5px auto;
+  width:  45%;
+  text-align: center;
+  flex-direction: row;
+}
+
+.fp-script-box {
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 2px;
+  background-color: #D9E4DD;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 2%;
+}
+
+.fp-date {
+  text-align: left;
+}
+
+.fp-genre {
+  text-align: right;
+}
+
+.fp-title {
+  text-align: left;
+}
+
+.fp-blurb {
+  text-align: left;
+}
+
+.fp-readmore {
+  text-align: left;
+}
+
+.fp-author {
+  text-align: right;
+}

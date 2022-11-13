@@ -30,36 +30,35 @@
 <body>
 
     <!-- Claire -->
-  <div class="row">
+    <div class="row">
+        <nav class="navbar navbar-expand-md navbar-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="?command=home">Scriptorium</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar" aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
 
-    <nav class="navbar navbar-expand-md navbar-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="?command=home">Scriptorium</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar" aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="?command=script-post">Post a New Script</a>
-            </li>
-            <li class="nav-item">
-              <?php 
-                    if(!isset($_SESSION['id'])){ // if the user is not logged in, show the two buttons
-                        echo <<< EOT
-                            <a href="?command=login" class="btn btn-outline-light me-2" role="button">Login</a>
-                            <a href="?command=account-create" class="btn btn-warning" role="button">Sign-up</a>
-                        EOT;
-                    } else {
-                        echo <<< EOT
-                            <a href="?command=logout" class="btn btn-danger" role="button">Logout</a>
-                        EOT;
-                    }
-                ?>
-
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                        <a class="nav-link" href="?command=script-post">Post a New Script</a>
+                        </li>
+                        <li class="nav-item">
+                          <?php 
+                                if(!isset($_SESSION['id'])){ // if the user is not logged in, show the two buttons
+                                    echo <<< EOT
+                                        <a href="?command=login" class="btn btn-outline-light me-2" role="button">Login</a>
+                                        <a href="?command=account-create" class="btn btn-warning" role="button">Sign-up</a>
+                                    EOT;
+                                } else {
+                                    echo <<< EOT
+                                        <a href="?command=logout" class="btn btn-danger" role="button">Logout</a>
+                                    EOT;
+                                }
+                            ?>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
