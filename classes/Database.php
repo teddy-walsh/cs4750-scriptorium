@@ -4,9 +4,15 @@ class Database {
     private $db;
 
     public function __construct() {
-            $username = getenv('DB_USER');
-            $password = getenv('DB_PASS');
-            $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium";
+            // $username = getenv('DB_USER');
+            // $password = getenv('DB_PASS');
+            // $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium";
+
+            $username = 'root';
+            $password = '';
+            $host = 'localhost:3306';
+            $dbname = 'scriptorium';
+            $dsn = "mysql:host=$host;dbname=$dbname"; 
 
         try {
             // Connect to the database.
@@ -199,7 +205,8 @@ class Database {
     }
 
     function get_script_by_id($script) {
-        $query = "SELECT * FROM scripts WHERE (script_id=:sid)";
+        $query = "SELECT * FROM scripts NATURAL JOIN user_created 
+            WHERE (script_id=:sid)";
         $statement = $this->db->prepare($query);
         $statement->bindValue(':sid', $script);
         $statement->execute();
@@ -246,6 +253,51 @@ class Database {
         if (!empty($user)) { // it found the user
             return $user["display_name"];
         } 
+    }
+
+    function delete_script($script_id) {
+        // delete the entry from user_created
+        $query = "DELETE FROM user_created WHERE (script_id=:sid)";
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':sid', $script_id);
+        $success = $statement->execute();
+
+        if ($success) { // it deleted from user_created; try to delete from scripts as well
+            $query = "DELETE FROM scripts WHERE (script_id=:sid)";
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':sid', $script_id);
+            $success = $statement->execute();
+        }
+
+        return $success;
+    }
+
+    function update_script($script_id, $title, $blurb, $script, $genre) {
+        $query = "UPDATE scripts
+                    SET title=:title, blurb=:blurb, script_body=:script, genre=:genre
+                    WHERE script_id=:sid";
+        try {
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':title', $title);
+            $statement->bindValue(':blurb', $blurb);
+            $statement->bindValue(':script', $script);
+            $statement->bindValue(':genre', $genre);
+            $statement->bindValue(':sid', $script_id);
+            $statement->execute();
+            return true;  
+        }
+        catch (PDOException $e) {
+            // echo $e->getMessage();
+            // if there is a specific SQL-related error message
+            //    echo "generic message (don't reveal SQL-specific message)";
+
+            if (strpos($e->getMessage(), "Duplicate")){
+                echo "Failed to add a script <br/>";
+            }
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
 }

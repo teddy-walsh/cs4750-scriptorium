@@ -193,25 +193,78 @@ class ScriptController {
     }
 
     public function fullscript() {
+        // gets and displays the script;
 
+        // sets the default values for empty scripts
+        $script_default = [
+            "script_id" => 0,
+            "title" => "",
+            "blurb" => "",
+            "script_body" => "",
+            "datetime" => NULL,
+            "genre" => ""
+            ];
+
+        // initialize variables to get passed/updated to the view
         $script = [];
+        $owner = "disabled";
+
+        // check to see if there's a script request in the GET
         if(!empty($_GET['script'])) {
             $script_id = filter_input(INPUT_GET, 'script', FILTER_VALIDATE_INT);
             if(false === $script_id) {
                 header("Location: ?command=home");
             } else {
                 $script = $this->db->get_script_by_id($script_id);
+
+                // checks if the user visiting the script is the owner
+                if (intval($script["user_id"]) == $_SESSION["id"]) {
+                    $owner = "enabled";
+                } else {
+                    $owner = "disabled";
+                }
             }
         }
 
-        // echo "<pre>";
-        //     print_r($script);
-        // echo "</pre>";
+        // Handles if the user wants to update or delete their script
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+              // They clicked some kind of button
+              if (isset($_POST['btnDelete'])) { 
+                // if they clicked the Delete button    
+                $delete_success = $this->db->delete_script(intval($_POST["script_id"]));
+                if ($delete_success) {
+                    $script = $script_default;
+                    $owner = "disabled";
+                    $message = "<div class='alert alert-success'>Script 
+                        successfully deleted.</div>";
+                } else {
+                    $message = "<div class='alert alert-danger'>Something went wrong.</div>";
+                }
+                
+              } else {
+                // Else they clicked the Update button
+                $update_success = $this->db->update_script($_POST["script_id"], $_POST["title"], $_POST["description"], $_POST["script"], $_POST["genre"]);
+                if ($update_success) {
+                    $script = $this->db->get_script_by_id($_POST["script_id"]);
+                    $owner = "enabled";
+                    $message = "<div class='alert alert-success'>Script updated.</div>"; 
+                } else {
+                    $message = "<div class='alert alert-danger'>Something went wrong.</div>";
+                }
+
+                
+              }
+            }
     
         include "templates/fullscript.php";
     }
 
+    // template for testing stuff
     public function test() {
+        //helpful debugger/prettyprinter
+        // echo "<pre>";
+        //     print_r($_POST);
+        // echo "</pre>";
     
         include "templates/test.php";
     }
