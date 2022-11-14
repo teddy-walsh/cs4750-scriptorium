@@ -193,24 +193,42 @@ class ScriptController {
     }
 
     public function fullscript() {
-
+        // gets and displays the script;
         $script = [];
+        $owner = "disabled";
         if(!empty($_GET['script'])) {
             $script_id = filter_input(INPUT_GET, 'script', FILTER_VALIDATE_INT);
             if(false === $script_id) {
                 header("Location: ?command=home");
             } else {
                 $script = $this->db->get_script_by_id($script_id);
+
+                if (intval($script["user_id"]) == $_SESSION["id"]) {
+                    $owner = "enabled";
+                } else {
+                    $owner = "disabled";
+                }
             }
         }
 
-        // echo "<pre>";
-        //     print_r($script);
-        // echo "</pre>";
+        // Handles if the user wants to update or delete their script
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+              // Something posted
+
+              if (isset($_POST['btnDelete'])) {
+                // btnDelete 
+                //UNTESTED
+                //$delete_success = $this->db->delete_script($script["script_id"]);
+              } else {
+                // Assume btnSubmit
+                $message = "<div class='alert alert-success'>Script updated.</div>"; 
+              }
+            }
     
         include "templates/fullscript.php";
     }
 
+    // template for testing stuff
     public function test() {
     
         include "templates/test.php";

@@ -199,7 +199,8 @@ class Database {
     }
 
     function get_script_by_id($script) {
-        $query = "SELECT * FROM scripts WHERE (script_id=:sid)";
+        $query = "SELECT * FROM scripts NATURAL JOIN user_created 
+            WHERE (script_id=:sid)";
         $statement = $this->db->prepare($query);
         $statement->bindValue(':sid', $script);
         $statement->execute();
@@ -246,6 +247,24 @@ class Database {
         if (!empty($user)) { // it found the user
             return $user["display_name"];
         } 
+    }
+
+    // NO IDEA IF THIS WORKS; GCP credits ran out during testing.
+    function delete_script($script_id) {
+        // delete the entry from user_created
+        $query = "DELETE * FROM user_created WHERE (script_id=:sid)";
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':sid', $script_id);
+        $success = $statement->execute();
+
+        if ($success) { // it deleted from user_created; try to delete from scripts as well
+            $query = "DELETE * FROM scripts WHERE (script_id=:sid)";
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':sid', $script_id);
+            $success = $statement->execute();
+        }
+
+        return $success;
     }
 
 }
