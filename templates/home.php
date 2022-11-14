@@ -13,7 +13,7 @@
 <section>
 <h3>List of Scripts</h3>
 
-  <?php foreach ($home_page_filler as $script_info): ?>
+  <?php foreach ($list_of_scripts as $script_info): ?>
 
     <div class="container-fluid fp-script-box">
       <div class="row">
@@ -45,6 +45,37 @@
     </div>
 
     <?php endforeach; ?>
+</section>
+
+<section>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
+        <span>
+            <?php if ($page > 1) {
+            echo '<a href="?command=home&page='.($page-1).'&sortby='.
+                ($sortby).'&order='.($order).'">';
+            echo ("⟵ Page " . ($page-1));
+          };
+          ?>
+          </a>
+        </span>
+      </div>
+      <div class="col-md-4">
+        <span>Page <?php echo $page ?></span>
+      </div>
+      <div class="col-md-4">
+        <span>
+          <?php if($is_more){
+            echo '<a href="?command=home&page='.($page+1).'&sortby='.
+              ($sortby).'&order='.($order).'">';
+            echo ("Page " . ($page+1). " ⟶");
+          };
+          ?>
+            </a>
+        </span>
+      </div>
+
 </section>
 
 <?php require 'styles/foot_style.php'; ?>

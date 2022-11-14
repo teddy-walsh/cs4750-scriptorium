@@ -87,6 +87,7 @@ class Database {
         return $result; 
     }
 
+    // runs user login authentication
     function user_login($username, $password) {
         $query = "SELECT * FROM users WHERE (display_name=:username)";
         $statement = $this->db->prepare($query);
@@ -123,7 +124,6 @@ class Database {
             //since the script insert was successful, try to update the user_created table, too
             $update_results = $this->update_user_created($user_id, $new_script_id);
 
-            //var_dump($update_results);
             // Let the controller know if the script was inserted AND the user_created table updated
             if ($update_results) {
                 return true;
@@ -131,7 +131,6 @@ class Database {
                 return false;
             }
             
-
         }
         catch (PDOException $e) {
             // echo $e->getMessage();
@@ -147,6 +146,7 @@ class Database {
         }
     }
 
+    // adds the appropriate tuple when new scripts are created
     function update_user_created($user_id, $new_script_id) {
         $query = "INSERT INTO user_created(user_id, script_id) 
                     VALUES (:user_id, :new_script_id)";
@@ -172,8 +172,14 @@ class Database {
         }
     }
 
-    function get_all_scripts() {
-        $query = "SELECT * FROM scripts";
+    function get_paged_scripts($page, $ordered_by, $direction) {
+        $items_per_page = 10;
+        $offset = ($page - 1) * $items_per_page;
+        $query = "SELECT user_id, display_name, title, blurb, genre, datetime, script_id 
+            FROM scripts 
+            NATURAL JOIN user_created 
+            NATURAL JOIN users
+            ORDER BY " . $ordered_by . " " . $direction . " LIMIT " . $offset . "," . $items_per_page;
         $statement = $this->db->prepare($query);
         $statement->execute();
         $result = $statement->fetchAll();   // fetch()
@@ -190,6 +196,17 @@ class Database {
         if (!empty($scripts)) { // it found the user's scripts
             return $scripts;
         }
+    }
+
+    function get_script_by_id($script) {
+        $query = "SELECT * FROM scripts WHERE (script_id=:sid)";
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':sid', $script);
+        $statement->execute();
+        $scriptfull = $statement->fetch();
+        if (!empty($scriptfull)) { // it found the script
+            return $scriptfull;
+        } 
     }
 
     function get_all_users() {
@@ -209,7 +226,7 @@ class Database {
     }
 
     function get_userpage_info($user_id) {
-        $query = "SELECT * FROM userpage WHERE (user_id=:uid)";
+        $query = "SELECT user_id, display_name, bio, URL FROM userpage NATURAL JOIN users WHERE (user_id=:uid)";
         $statement = $this->db->prepare($query);
         $statement->bindValue(':uid', $user_id);
         $statement->execute();

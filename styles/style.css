@@ -206,6 +206,7 @@ section {
   width:  45%;
   text-align: center;
   flex-direction: row;
+  margin-bottom: 15px;
 }
 
 .fp-script-box {

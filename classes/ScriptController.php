@@ -21,6 +21,9 @@ class ScriptController {
             case "script-post":
                 $this->newScriptPost();
                 break;
+            case "fullscript":
+                $this->fullscript();
+                break;
             case "test":
                 $this->test();
                 break;
@@ -56,38 +59,39 @@ class ScriptController {
 
     // Manages the home page
     public function home() {
-        $list_of_scripts = $this->db->get_all_scripts();
-        $list_of_users = $this->db->get_all_users();
-        $joiner = $this->db->get_all_user_created();
-
-        $home_page_filler = [];
-        foreach ($joiner as $item) {
-            $sid = intval($item["script_id"]);
-            $uid = intval($item["user_id"]);
-            $temp = [];
-
-            foreach ($list_of_users as $user) {
-                if (intval($user["user_id"]) == $uid) {
-                    //add to the temp.
-                    $temp["display_name"] = $user["display_name"];
-                    $temp["user_id"] = $user["user_id"];
-                }
+        $page = 1;
+        $sortby = "script_id";
+        $order = "ASC";
+        $is_more = true;
+        if(!empty($_GET['page'])) {
+            $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT);
+            if(false === $page) {
+                $page = 1;
             }
-
-            foreach ($list_of_scripts as $script) {
-                if (intval($script["script_id"]) == $sid) {
-                    // //add to the temp.
-                    $temp["title"] = $script["title"];
-                    $temp["blurb"] = $script["blurb"];
-                    $temp["genre"] = $script["genre"];
-                    $temp["datetime"] = $script["datetime"];
-                    $temp["script_id"] = $script["script_id"];
-                }
-            }
-
-            // add the temp to the overall array
-            array_push($home_page_filler, $temp);
         }
+        if(!empty($_GET['sortby'])) {
+            if(false === $page) {
+                $sortby = "script_id";
+            } else {
+              $sortby = $_GET['sortby'];
+            }
+        }
+        if(!empty($_GET['order'])) {
+            if(false === $page) {
+                $order = "ASC";
+            } else {
+              $order = $_GET['order'];
+            }
+        }
+
+        // Right now it just shows the scripts in the submission order.
+        $list_of_scripts = $this->db->get_paged_scripts($page, $sortby, $order);
+        if (count($list_of_scripts) < 10) {
+            $is_more = false;
+        } else {
+            $is_more = true;
+        }
+
         include "templates/home.php";
     }
 
@@ -105,6 +109,8 @@ class ScriptController {
         include "templates/login.php";
     }
 
+    // Lets users create accounts
+    // TODO NEED TO ADD THE NAME STUFF
     public function accountCreate() {
         if (isset($_POST["email"])) { 
             // password requirements checker
@@ -140,6 +146,7 @@ class ScriptController {
         include "templates/account-create.php";
     }
 
+    // New script post page
     public function newScriptPost() {
         // echo "<pre>";
         //     print_r($_POST);
@@ -169,12 +176,8 @@ class ScriptController {
         $info = [];
         if (isset($_GET["user"])) { 
             $user_details = $this->db->get_userpage_info($_GET["user"]);
-            $user_name = $this->db->get_user_displayname($_GET["user"]);
             if (!empty($user_details)) { // it found the user in userpage
                 $info = $user_details;
-            }
-            if (!empty($user_name)) { // it found the user in users
-                $info["display_name"] = $user_name;
             }
 
             // populate their list of scripts
@@ -187,6 +190,25 @@ class ScriptController {
 
     
         include "templates/userpage.php";
+    }
+
+    public function fullscript() {
+
+        $script = [];
+        if(!empty($_GET['script'])) {
+            $script_id = filter_input(INPUT_GET, 'script', FILTER_VALIDATE_INT);
+            if(false === $script_id) {
+                header("Location: ?command=home");
+            } else {
+                $script = $this->db->get_script_by_id($script_id);
+            }
+        }
+
+        // echo "<pre>";
+        //     print_r($script);
+        // echo "</pre>";
+    
+        include "templates/fullscript.php";
     }
 
     public function test() {
