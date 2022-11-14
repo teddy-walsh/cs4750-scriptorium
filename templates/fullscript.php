@@ -4,10 +4,11 @@
     require 'styles/head_style.php';
     ?>
 
+
 <section>
     <div class="d-flex justify-content-center">
       <div class="script-form">
-        <form action="?command=script-post" method="post">
+        <form action="?command=fullscript" method="post">
           <div class="form-group">
             <div class="row">
 
@@ -51,6 +52,8 @@
                 </div>
                 <div class="col-md-6">
                     <?php if ($owner == "enabled") {
+                        echo '<input type="hidden" id="script-id" 
+                            name="script_id" value="'. $script["script_id"]. '">';
                         echo <<< EOT
                             <input type="submit" class="btn btn-md btn-danger" 
                             id="submit" name="btnDelete" value="Delete" onclick="return confirm('Are you sure?')">
