@@ -74,5 +74,10 @@
 </section>
 
 <section>
+  <div>
+    <form action="?command=fullscript" method="post">
+
+
+  </div>
     Comments go here, I Guess
 </section>

@@ -4,17 +4,12 @@ class Database {
     private $db;
 
     public function __construct() {
-            // $username = getenv('DB_USER');
-            // $password = getenv('DB_PASS');
-            // $dsn = "mysql:unix_socket=/cloudsql/cs4750scriptorium:us-east4:scriptorium-home;dbname=scriptorium";
 
-            $username = 'root';
-            $password = '';
-            $host = 'localhost:3306';
-            $dbname = 'scriptorium';
-            $dsn = "mysql:host=$host;dbname=$dbname"; 
+            $username = Config::$db["user"];
+            $password = Config::$db["pass"];
+            $dsn = Config::$db["dsn"];
 
-        try {
+       try {
             // Connect to the database.
             $this->db = new PDO($dsn, $username, $password);
 

@@ -1,5 +1,5 @@
 <?php
-//Hi!
+
 class ScriptController {
 
 	private $command;
@@ -11,6 +11,11 @@ class ScriptController {
     }
 
     public function run() {
+        // users not logged in can still visit the site, view scripts, etc. but they need
+        // to have some user_id for checks later.
+        if (!isset($_SESSION["id"])) {
+            $_SESSION["id"] = -1;
+        }
         switch($this->command) {
             case "login":
                 $this->login();
@@ -240,7 +245,7 @@ class ScriptController {
                     $message = "<div class='alert alert-danger'>Something went wrong.</div>";
                 }
                 
-              } else {
+              } elseif (isset($_POST['btnSave'])){
                 // Else they clicked the Update button
                 $update_success = $this->db->update_script($_POST["script_id"], $_POST["title"], $_POST["description"], $_POST["script"], $_POST["genre"]);
                 if ($update_success) {
@@ -252,6 +257,9 @@ class ScriptController {
                 }
 
                 
+              } else { //They clicked the comment button
+
+                // scriptid, posters_user_id, text
               }
             }
     

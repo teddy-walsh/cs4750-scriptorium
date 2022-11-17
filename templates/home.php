@@ -5,7 +5,7 @@
     ?>
 
 <?php 
-    if(isset($_SESSION["id"])){ // if the user is logged in
+    if(isset($_SESSION["id"]) && $_SESSION["id"] != -1){ // if the user is logged in
         echo "<div><p>Welcome back, " . $_SESSION["username"] . "!";
     }
   ?>
