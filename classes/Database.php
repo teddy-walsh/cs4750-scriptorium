@@ -327,4 +327,51 @@ echo $e->getMessage();
         }
     }
 
+    function comment_on_script ($script_id, $user_id, $text) {
+        $query = "INSERT INTO script_parent(script_id_parent) 
+        VALUES (:script_id)";
+
+        try {
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':script_id', $script_id);
+            $statement->execute();
+            
+        }
+        catch (PDOException $e) {
+            // echo $e->getMessage();
+            // if there is a specific SQL-related error message
+            //    echo "generic message (don't reveal SQL-specific message)";
+
+            if (strpos($e->getMessage(), "Duplicate")){
+                echo "Failed to make a comment <br/>";
+            }
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    function comment_on_comment ($comment_id, $user_id, $text) {
+        $query = "INSERT INTO comment_parent(comment_id_parent) 
+        VALUES (:comment_id)";
+        try {
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':comment_id', $comment_id);
+            $statement->execute();
+            
+        }
+        catch (PDOException $e) {
+            // echo $e->getMessage();
+            // if there is a specific SQL-related error message
+            //    echo "generic message (don't reveal SQL-specific message)";
+
+            if (strpos($e->getMessage(), "Duplicate")){
+                echo "Failed to make a comment <br/>";
+            }
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
 }

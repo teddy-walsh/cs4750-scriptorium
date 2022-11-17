@@ -257,7 +257,7 @@ class ScriptController {
                 }
 
                 
-              } else { //They clicked the comment button
+              } elseif (isset($_POST["btnScriptReply"])){ //They clicked the comment button
                 $comment_success = $this->db->comment_on_script($_POST["script_id"], $_POST["posters_user_id"], $_POST["text"])
                 // scriptid, posters_user_id, text
                 if ($comment_success) {
@@ -267,10 +267,19 @@ class ScriptController {
                 else {
                     $message = "<div class='alert alert-danger'>Unable to post comment.</div>";
                 }
-                        echo "<pre>";
+              }
+              elseif (isset($_POST["btnCommentReply"])) {
+                $comment_success = $this->db->comment_on_comment($_POST["comment_id"], $_POST["posters_user_id"], $_POST["text"])
+                if ($comment_success) {
+                    $message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
+                }
+                else {
+                    $message = "<div class='alert alert-danger'>Unable to post comment.</div>";
+                }
+              }
+              echo "<pre>";
             print_r($_POST);
         echo "</pre>";
-              }
             }
     
         include "templates/fullscript.php";
