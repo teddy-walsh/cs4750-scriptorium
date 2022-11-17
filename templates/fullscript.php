@@ -74,5 +74,14 @@
 </section>
 
 <section>
+  <div>
+    <form action="?command=fullscript" method="post">
+
+      <div><label id="comment" name="comment">Comment</label></div>
+      <textarea rows="3" name="description" id="description"></textarea>
+      <input type="submit" class="btn btn-md btn-warning" 
+          id="comment" name="btnComment" value="Post">
+
+  </div>
     Comments go here, I Guess
 </section>
