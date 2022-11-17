@@ -18,7 +18,7 @@ handlers:
 # Remember - storing secrets in plaintext is potentially unsafe. Consider using
 # something like https://cloud.google.com/secret-manager/ to help keep secrets secret.
 env_variables:
-  INSTANCE_UNIX_SOCKET: /cloudsql/cs4750scriptorium:us-east4:scriptorium-home
-  DB_USER: root
-  DB_PASS: ~s2na=M\6|n;+h@9
-  DB_NAME: sciptorium
+  DB_USER: $GCP_DB_USER
+  DB_NAME: $GCP_DB_NAME
+  DB_PASS: $GCP_DB_PASS
+  INSTANCE_UNIX_SOCKET: $GCP_INSTANCE_UNIX_SOCKET
