@@ -1,0 +1,19 @@
+deploy:
+    name: deploy-gcp
+    runs-on: ubuntu-latest
+    needs: [build]
+steps:
+    - uses: actions/checkout@v1
+    - uses: golang-enthusiast/app-yaml-env-compiler@v1.0
+      env:
+        DB_USER: ${{ secrets.GCP_DB_USER }}
+        DB_NAME: ${{ secrets.GCP_DB_NAME }}
+        DB_PASS: ${{ secrets.GCP_DB_PASS }}
+        INSTANCE_UNIX_SOCKET: ${{ secrets.GCP_INSTANCE_UNIX_SOCKET }}              
+    - uses: actions-hub/gcloud@master
+      env:
+        PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
+        APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_AUTH }}
+        CLOUDSDK_CORE_DISABLE_PROMPTS: 1
+      with:
+        args: app deploy app.yaml
