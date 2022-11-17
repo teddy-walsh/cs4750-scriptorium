@@ -51,7 +51,7 @@ class Database {
     }
 
     // Adds new accounts via the sign-up page
-    function add_user($email, $username, $password) {
+    function add_user($email, $username, $password, $fname, $mname, $lname) {
         // var_dump($_POST);
         $query = "INSERT INTO users(email, display_name, password) 
                     VALUES (:email, :username, :password)";
@@ -61,13 +61,18 @@ class Database {
             $statement->bindValue(':username', $username);
             $statement->bindValue(':password', password_hash($password, PASSWORD_DEFAULT));
             $statement->execute();
-            echo "Successfully added new user";
+
+            $userID = $this->db->lastInsertId();
+            $success = $this->fullName($userID, $fname, $mname, $lname);
+            if ($success)
+                return true;
+            //echo "Successfully added new user";
 
             // if ($statement->rowCount() == 0) {
             //     echo "Failed to add a friend <br/>";
             // }
 
-            return true; // this gets checked on the sign-up page to then log in the new user
+            //return true; // this gets checked on the sign-up page to then log in the new user
         }
         catch (PDOException $e) {
             // echo $e->getMessage();
@@ -81,6 +86,33 @@ class Database {
         catch (Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+    function fullName($u, $f, $m, $l) {
+        $query = "INSERT INTO user_full_names(user_id, first_name, middle_name, last_name) 
+        VALUES (:u, :f, :m, :l)";
+try {
+$statement = $this->db->prepare($query);
+$statement->bindValue(':u', $u);
+$statement->bindValue(':f', $f);
+$statement->bindValue(':m', $m);
+$statement->bindValue(':l', $l);
+$statement->execute();
+
+return true; // this gets checked on the sign-up page to then log in the new user
+}
+catch (PDOException $e) {
+// echo $e->getMessage();
+// if there is a specific SQL-related error message
+//    echo "generic message (don't reveal SQL-specific message)";
+
+if (strpos($e->getMessage(), "Duplicate")){
+    echo "Failed to add a friend <br/>";
+}
+}
+catch (Exception $e) {
+echo $e->getMessage();
+}
     }
 
     // returns the user_id for a particular username

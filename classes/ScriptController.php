@@ -129,14 +129,13 @@ class ScriptController {
                     </ul>
                     </div>";
             } else {
-                // create a new user
-                $insert = $this->db->add_user($_POST["email"], $_POST["username"],$_POST["password"]);
-
+                // create a new user and adds their names to user_full_names (including first, middle, and last)
+                //var_dump($_POST);
+                $insert = $this->db->add_user($_POST["email"], $_POST["username"],$_POST["password"], $_POST["fname"], $_POST["mname"], $_POST["lname"]);
                 if ($insert === false) {
                     $message = "<div class='alert alert-danger'>Error inserting new user.</div>";
                 } else { // user successfully created
                     $new_id = $this->db->get_user_id($_POST["username"]);
-                    // var_dump($new_id);
                     $_SESSION["username"] = $_POST["username"];
                     $_SESSION["id"] = $new_id["user_id"];
                     header("Location: ?command=home");
