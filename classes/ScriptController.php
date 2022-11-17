@@ -258,8 +258,15 @@ class ScriptController {
 
                 
               } else { //They clicked the comment button
-
+                $comment_success = $this->db->comment_on_script($_POST["script_id"], $_POST["posters_user_id"], $_POST["text"])
                 // scriptid, posters_user_id, text
+                if ($comment_success) {
+                    //$script = $this->db->get_comment_by_id($_POST["posters_comment_id"])
+                    $message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
+                }
+                else {
+                    $message = "<div class='alert alert-danger'>Unable to post comment.</div>";
+                }
                         echo "<pre>";
             print_r($_POST);
         echo "</pre>";
