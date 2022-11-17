@@ -1,5 +1,5 @@
 <?php
-//Hi!
+
 class ScriptController {
 
 	private $command;
@@ -11,6 +11,11 @@ class ScriptController {
     }
 
     public function run() {
+        // users not logged in can still visit the site, view scripts, etc. but they need
+        // to have some user_id for checks later.
+        if (!isset($_SESSION["id"])) {
+            $_SESSION["id"] = -1;
+        }
         switch($this->command) {
             case "login":
                 $this->login();
