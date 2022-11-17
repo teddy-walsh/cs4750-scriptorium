@@ -11,6 +11,9 @@ $command = "home";
 if (isset($_GET["command"]))
     $command = $_GET["command"];
 
+// error_reporting(E_ALL);
+// ini_set("display_errors", 1);
+// include("pathtobadfiletotest.php");
 
 // Instantiate the controller and run
 $scripto = new ScriptController($command);
