@@ -23,9 +23,9 @@
                 <form action="?command=account-create" method="post" onsubmit="return validate();">
                     <div class="mb-3">
                         <label for="name" class="form-label">Your Name</label>
-                        <input type="text" class="form-control" placeholder="First" id="fname" name="fname"/>
+                        <input type="text" class="form-control" placeholder="First" id="fname" name="fname" required/>
                         <input type="text" class="form-control" placeholder="Middle (optional)" id="mname" name="mname"/>
-                        <input type="text" class="form-control" placeholder="Last" id="lname" name="lname"/>
+                        <input type="text" class="form-control" placeholder="Last" id="lname" name="lname" required/>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
