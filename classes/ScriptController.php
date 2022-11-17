@@ -1,5 +1,5 @@
 <?php
-
+//Hi!
 class ScriptController {
 
 	private $command;
