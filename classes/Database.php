@@ -327,8 +327,8 @@ echo $e->getMessage();
         }
     }
 
-    function get_parent_comments_by_scriptid($script_id) {
-        $query = "SELECT script_id_parent, comment_id_child, comment_id, users.user_id as user_id,
+    function get_root_comments($script_id) {
+        $query = "SELECT script_id_parent, comment_id, users.user_id as user_id,
             comments_text, time, display_name FROM script_parent 
         JOIN comments ON script_parent.comment_id_child = comments.comment_id
         JOIN users ON comments.user_id = users.user_id 
@@ -336,14 +336,32 @@ echo $e->getMessage();
         $statement = $this->db->prepare($query);
         $statement->bindValue(':sid', $script_id);
         $statement->execute();
-        $parent_comments = $statement->fetchAll();
+        $root_comments = $statement->fetchAll();
         // echo "<pre>";
         //     print_r($parent_comments);
         // echo "</pre>";
 
-        if (!empty($parent_comments)) { // it found root comments for the script
-            return $parent_comments;
+        if (!empty($root_comments)) { // it found root comments for the script
+            return $root_comments;
         } 
+    }
+
+    function get_child_comments($script_id) {
+        $query = "SELECT comment_id, users.user_id as user_id, comment_parent.comment_id_parent as comment_parent, comments_text, time, display_name 
+        FROM script_parent 
+        JOIN comment_parent ON script_parent.comment_id_child = comment_parent.comment_id_parent
+        JOIN comments ON comment_parent.comment_id_child = comments.comment_id
+        JOIN users ON comments.user_id = users.user_id  
+            WHERE (script_parent.script_id_parent=:sid)";
+
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':sid', $script_id);
+        $statement->execute();
+        $child_comments = $statement->fetchAll();
+        if (!empty($child_comments)) { // it found root comments for the script
+            return $child_comments;
+        } 
+
     }
 
     function comment_on_script ($script_id, $user_id, $text) {
@@ -374,12 +392,17 @@ echo $e->getMessage();
     }
 
     function comment_on_comment ($comment_id, $user_id, $text) {
-        $query = "INSERT INTO comment_parent(comment_id_parent) 
-        VALUES (:comment_id)";
+        $new_comment_id = $this->create_comment($user_id, $text);
+
+        $query = "INSERT INTO comment_parent VALUES (:cidparent, :cidchild)";
         try {
             $statement = $this->db->prepare($query);
-            $statement->bindValue(':comment_id', $comment_id);
-            $statement->execute();
+            $statement->bindValue(':cidparent', $comment_id);
+            $statement->bindValue(':cidchild', $new_comment_id);
+            $success = $statement->execute();
+            if ($success) {
+                return true;
+            }
             
         }
         catch (PDOException $e) {

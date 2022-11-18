@@ -26,7 +26,9 @@
                         <div class="col">
                             <label id="datetime" name="datetime">Date & Time</label>
                             <input type="text" class="form-control" name="datetime" id="datetime" 
-                                disabled readonly value="<?php echo $script["datetime"]; ?>"> 
+                                disabled readonly value="<?php 
+                          echo date("F j, Y, g:i a", strtotime($script["datetime"])); ?>">
+
                         </div>
                     </div>
                 </div>
@@ -94,33 +96,75 @@
     ?>
 
 
-    <?php if (!empty($parent_comments)) {
-      foreach ($parent_comments as $pcomment): ?>
+    <?php if (!empty($root_comments)) {
+      foreach ($root_comments as $rootcomment): ?>
       <div><label id="comments" name="comments"></label></div>
           <div class="comment-block">
               <div class="row">
-                  <div class="col-md-8 commenter">
+                  <div class="col-md-7 commenter">
                       <span>Posted by:
-                        <?php $userlink = "?command=userpage&user=".$pcomment['user_id']; ?>
-                        <a href="<?php echo $userlink; ?>"><?php echo $pcomment["display_name"]; ?></a>
+                        <?php $userlink = "?command=userpage&user=".$rootcomment['user_id']; ?>
+                        <a href="<?php echo $userlink; ?>"><?php echo $rootcomment["display_name"]; ?></a>
                       </span>
                   </div>
-                  <div class="col-md-4 comment-date">
-                      <span><?php echo $pcomment["time"]; ?></span>
+                  <div class="col-md-5 comment-date">
+                      <span><?php 
+                          echo date("F j, Y, g:i a", strtotime($rootcomment["time"])); ?>
+                     </span>
                   </div>
               </div>
               <hr>
               <div class="row blurb">
-                  <span><?php echo $pcomment["comments_text"]; ?></span>
+                  <span><?php echo $rootcomment["comments_text"]; ?></span>
               </div>
           </div>
       </div>
+
+      <!-- Child comments -->
+      <?php
+      if (!empty($child_comments)) {
+          foreach ($child_comments as $childcomment): 
+            if ($rootcomment["comment_id"] != $childcomment["comment_parent"]) {
+              continue;
+            };
+      ?>
+        <div class="row">
+          <div class="col-md-1">
+            <h3>↳</h3>
+          </div>
+          <div class="col-md-11">
+
+              <div class="child-block">
+                  <div class="row">
+                      <div class="col-md-7 commenter">
+                          <span>Posted by:
+                            <?php $userlink = "?command=userpage&user=".$childcomment['user_id']; ?>
+                            <a href="<?php echo $userlink; ?>"><?php echo $childcomment["display_name"]; ?></a>
+                          </span>
+                      </div>
+                      <div class="col-md-5 comment-date">
+                          <span><?php 
+                          echo date("F j, Y, g:i a", strtotime($childcomment["time"])); ?></span>
+                      </div>
+                  </div>
+                  <hr>
+                  <div class="row blurb">
+                      <span><?php echo $childcomment["comments_text"]; ?></span>
+                  </div>
+              </div>
+            </div>
+
+        </div>
+      <?php endforeach; 
+        } //this bracket goes to the IF way at the top do not delete
+      ?> 
+
 
       <!-- Comment Reply Box, one for each root comment -->
       <div>
           <div class="form-group row" <?php echo($member) ?>>
               <div class="col-md-1">
-                  <span><h3>↳</h3></span>
+                  <span></span>
               </div>
               <div class="col-md-9">
                   <form action="?command=fullscript" method="post">
@@ -128,12 +172,12 @@
                           id="description" placeholder="Reply to the above"/>
                       <input type="hidden" id="script-id" name="script_id" 
                           value="<?php echo ($script["script_id"]) ?>"/>
-                      <input type="hidden" id="comment-id-parent" name="comment-id-parent" 
-                          value="<?php echo ($script["comment-id-parent"]) ?>"/>
+                      <input type="hidden" id="parent_comment_id" name="parent_comment_id" 
+                          value="<?php echo ($rootcomment["comment_id"]) ?>"/>
               </div>
               <div class="col-md-2">
                   <input type="submit" class="btn btn-lg btn-warning" 
-                      id="comment" name="btnCommentReply" value="Post" disabled/>
+                      id="comment" name="btnCommentReply" value="Post"/>
                   </form>
               </div>
           </div>
@@ -151,8 +195,6 @@
               <input type="text" class=".input-lg form-control" name="comment_text" id="description" placeholder="Comment on the script">
               <input type="hidden" id="script-id" 
                                 name="script_id" value="<?php echo ($script["script_id"]) ?>">
-              <input type="hidden" id="comment-id-parent" name="comment-id-parent" 
-                value="<?php //echo ($script["comment-id-parent"]) ?>">
           </div>
           <div class="col-md-2">
               <input type="submit" class="btn btn-lg btn-warning" 

@@ -17,10 +17,10 @@
 
     <div class="container-fluid fp-script-box">
       <div class="row">
-        <div class="col-md-3 date">
-            <h5><?php echo $script_info["datetime"]; ?></h5>
+        <div class="col-md-4 date">
+            <h5><?php echo date("F j, Y, g:i a", strtotime($script_info["datetime"])); ?></h5>
         </div>
-        <div class="col-md-9 genre">
+        <div class="col-md-8 genre">
           <h5><?php echo $script_info["genre"]; ?></h5>
         </div>
       </div>

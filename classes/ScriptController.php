@@ -222,7 +222,8 @@ class ScriptController {
             } else {
                 // build the script and root comment arrays
                 $script = $this->db->get_script_by_id($script_id);
-                $parent_comments = $this->db->get_parent_comments_by_scriptid($script_id);
+                $root_comments = $this->db->get_root_comments($script_id);
+                $child_comments = $this->db->get_child_comments($script_id);
 
                 // $comment_list = $parent_comments;
 
@@ -279,18 +280,18 @@ class ScriptController {
 
               }
               elseif (isset($_POST["btnCommentReply"])) {
-                $comment_success = $this->db->comment_on_comment($_POST["comment_id"], $_POST["posters_user_id"], $_POST["text"]);
-                $comment2_success = $this->db->general_comment($_POST["posters_user_id"], $_POST["text"]);
-                if ($comment_success && $comment2_success) {
-                    $message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
-                }
-                else {
-                    $message = "<div class='alert alert-danger'>Unable to post comment.</div>";
+                $comment_success = $this->db->comment_on_comment($_POST["parent_comment_id"], 
+                    $_SESSION["id"], $_POST["comment_text"]);
+                if ($comment_success) {
+                    header("Location: ?command=fullscript&script=".$_POST["script_id"]);
+
+                    // the $messages aren't implemented on the script page. Not sure how to handle.
+                    //$message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
+                } else {
+                    $qwerty = 1;
+                    //$message = "<div class='alert alert-danger'>Unable to post comment.</div>";
                 }
               }
-              echo "<pre>";
-            print_r($_POST);
-        echo "</pre>";
             }
     
         include "templates/fullscript.php";
