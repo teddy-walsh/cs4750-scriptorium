@@ -17,27 +17,27 @@
 
     <div class="container-fluid fp-script-box">
       <div class="row">
-        <div class="col-md-3 fp-date">
-            <h5><?php echo $script_info["datetime"]; ?></h5>
+        <div class="col-md-4 date">
+            <h5><?php echo date("F j, Y, g:i a", strtotime($script_info["datetime"])); ?></h5>
         </div>
-        <div class="col-md-9 fp-genre">
+        <div class="col-md-8 genre">
           <h5><?php echo $script_info["genre"]; ?></h5>
         </div>
       </div>
-      <div class="col-md-12 fp-title">
+      <div class="col-md-12 title">
         <h2><?php echo $script_info["title"]; ?></h2>
       </div>
       <div class="row">
-        <div class="col-md-12 fp-blurb">
+        <div class="col-md-12 blurb">
           <p><?php echo $script_info["blurb"]; ?></p>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-3 fp-readmore">
+        <div class="col-md-3 readmore">
           <?php $scriptlink = "?command=fullscript&script=".$script_info['script_id']; ?>
           <span><a href="<?php echo $scriptlink; ?>">Read more ⟶</a></span>
         </div>
-        <div class="col-md-9 fp-author">
+        <div class="col-md-9 author">
           <?php $userlink = "?command=userpage&user=".$script_info['user_id']; ?>
           <span><a href="<?php echo $userlink; ?>"><?php echo $script_info["display_name"]; ?></a></span>
         </div>

@@ -219,26 +219,50 @@ section {
   padding: 2%;
 }
 
-.fp-date {
+.date {
   text-align: left;
 }
 
-.fp-genre {
+.genre {
   text-align: right;
 }
 
-.fp-title {
+.title {
   text-align: left;
 }
 
-.fp-blurb {
+.blurb {
   text-align: left;
 }
 
-.fp-readmore {
+.readmore {
   text-align: left;
 }
 
-.fp-author {
+.author {
   text-align: right;
+}
+
+.commenter {
+  text-align: left;
+}
+
+.comment-date {
+  text-align: right;
+}
+
+.comment-block {
+  border-radius: 10px 10px 0px 10px;
+  border-style: solid;
+  border-width: 2px;
+  background-color: #D9E4DD;
+  padding: 2%;
+}
+
+.child-block {
+  border-radius: 0px 0px 0px 0px;
+  border-style: solid;
+  border-width: 2px;
+  background-color: #FBF7F0;
+  padding: 2%;
 }
