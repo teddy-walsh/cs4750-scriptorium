@@ -327,32 +327,49 @@ echo $e->getMessage();
         }
     }
 
+    function get_parent_comments_by_scriptid($script_id) {
+        $query = "SELECT script_id_parent, comment_id_child, comment_id, users.user_id as user_id,
+            comments_text, time, display_name FROM script_parent 
+        JOIN comments ON script_parent.comment_id_child = comments.comment_id
+        JOIN users ON comments.user_id = users.user_id 
+            WHERE (script_parent.script_id_parent=:sid)";
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':sid', $script_id);
+        $statement->execute();
+        $parent_comments = $statement->fetchAll();
+        // echo "<pre>";
+        //     print_r($parent_comments);
+        // echo "</pre>";
+
+        if (!empty($parent_comments)) { // it found root comments for the script
+            return $parent_comments;
+        } 
+    }
+
     function comment_on_script ($script_id, $user_id, $text) {
-        $query = "INSERT INTO script_parent(script_id_parent, comment_id_child) 
-        VALUES (:script_id)";
+        $commentID = $this->create_comment($user_id, $text);
 
-        try {
-            $statement = $this->db->prepare($query);
-            $statement->bindValue(':script_id', $script_id);
-            $statement->execute();
+        if (isset($commentID)) {
+            $query = "INSERT INTO script_parent(script_id_parent, comment_id_child) 
+            VALUES (:script_id, :cid)";
 
-            //$userID = $this->db->lastInsertId();
-            //$success = $this->fullName($userID, $fname, $mname, $lname);
-            //if ($success)
-                //return true;
-            
-        }
-        catch (PDOException $e) {
-            // echo $e->getMessage();
-            // if there is a specific SQL-related error message
-            //    echo "generic message (don't reveal SQL-specific message)";
-
-            if (strpos($e->getMessage(), "Duplicate")){
-                echo "Failed to make a comment <br/>";
+            try {
+                $statement = $this->db->prepare($query);
+                $statement->bindValue(':script_id', $script_id);
+                $statement->bindValue(':cid', $commentID);
+                $success = $statement->execute();
+                if ($success) {
+                    return true;
+                }
             }
-        }
-        catch (Exception $e) {
-            echo $e->getMessage();
+            catch (PDOException $e) {
+                if (strpos($e->getMessage(), "Duplicate")){
+                    echo "Failed to make a comment <br/>";
+                }
+            }
+            catch (Exception $e) {
+                echo $e->getMessage();
+            }
         }
     }
 
@@ -379,15 +396,16 @@ echo $e->getMessage();
         }
     }
 
-    function general_comment ($user_id, $text) {
-        $query = "INSERT INTO comment(user_id, comments_text)
+    function create_comment ($user_id, $text) {
+        $query = "INSERT INTO comments(user_id, comments_text)
         VALUES (:user_id, :text)";
         try {
             $statement = $this->db->prepare($query);
-            $statement->bindValue(':comment_id', $comment_id);
-            $statement->bindValue(':text', $comments_text);
+            $statement->bindValue(':user_id', $user_id);
+            $statement->bindValue(':text', $text);
             $statement->execute();
-            
+            $commentID = $this->db->lastInsertId();
+            return $commentID;   
         }
         catch (PDOException $e) {
             // echo $e->getMessage();

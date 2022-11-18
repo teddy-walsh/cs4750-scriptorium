@@ -12,7 +12,7 @@ class ScriptController {
 
     public function run() {
         // users not logged in can still visit the site, view scripts, etc. but they need
-        // to have some user_id for checks later.
+        // to be assigned a user_id for checks later.
         if (!isset($_SESSION["id"])) {
             $_SESSION["id"] = -1;
         }
@@ -211,6 +211,7 @@ class ScriptController {
 
         // initialize variables to get passed/updated to the view
         $script = [];
+        $comment_list = [];
         $owner = "disabled";
 
         // check to see if there's a script request in the GET
@@ -219,7 +220,11 @@ class ScriptController {
             if(false === $script_id) {
                 header("Location: ?command=home");
             } else {
+                // build the script and root comment arrays
                 $script = $this->db->get_script_by_id($script_id);
+                $parent_comments = $this->db->get_parent_comments_by_scriptid($script_id);
+
+                // $comment_list = $parent_comments;
 
                 // checks if the user visiting the script is the owner
                 if (intval($script["user_id"]) == $_SESSION["id"]) {
@@ -230,44 +235,48 @@ class ScriptController {
             }
         }
 
-        // Handles if the user wants to update or delete their script
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-              // They clicked some kind of button
-              if (isset($_POST['btnDelete'])) { 
-                // if they clicked the Delete button    
-                $delete_success = $this->db->delete_script(intval($_POST["script_id"]));
-                if ($delete_success) {
-                    $script = $script_default;
-                    $owner = "disabled";
-                    $message = "<div class='alert alert-success'>Script 
-                        successfully deleted.</div>";
-                } else {
-                    $message = "<div class='alert alert-danger'>Something went wrong.</div>";
-                }
+        // Handles if the user wants to update or delete their script or comment
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') { // They clicked some kind of button
+              
+              if (isset($_POST['btnDelete'])) { // if they clicked the Delete button  
+                  
+                    $delete_success = $this->db->delete_script(intval($_POST["script_id"]));
+                    if ($delete_success) {
+                        $script = $script_default;
+                        $owner = "disabled";
+                        $message = "<div class='alert alert-success'>Script 
+                            successfully deleted.</div>";
+                    } else {
+                        $message = "<div class='alert alert-danger'>Something went wrong.</div>";
+                    }
                 
-              } elseif (isset($_POST['btnSave'])){
-                // Else they clicked the Update button
-                $update_success = $this->db->update_script($_POST["script_id"], $_POST["title"], $_POST["description"], $_POST["script"], $_POST["genre"]);
-                if ($update_success) {
-                    $script = $this->db->get_script_by_id($_POST["script_id"]);
-                    $owner = "enabled";
-                    $message = "<div class='alert alert-success'>Script updated.</div>"; 
-                } else {
-                    $message = "<div class='alert alert-danger'>Something went wrong.</div>";
-                }
+              } elseif (isset($_POST['btnSave'])){ // If they clicked the Update button
+                
+                    $update_success = $this->db->update_script($_POST["script_id"], $_POST["title"], $_POST["description"], $_POST["script"], $_POST["genre"]);
+                    if ($update_success) {
+                        $script = $this->db->get_script_by_id($_POST["script_id"]);
+                        $owner = "enabled";
+                        $message = "<div class='alert alert-success'>Script updated.</div>"; 
+                    } else {
+                        $message = "<div class='alert alert-danger'>Something went wrong.</div>";
+                    }
 
                 
-              } elseif (isset($_POST["btnScriptReply"])){ //They clicked the comment button
-                $comment_success = $this->db->comment_on_script($_POST["script_id"], $_POST["posters_user_id"], $_POST["text"]);
-                $comment2_success = $this->db->general_comment($_POST["posters_user_id"], $_POST["text"]);
-                // scriptid, posters_user_id, text
-                if ($comment_success && $comment2_success) {
-                    //$script = $this->db->get_comment_by_id($_POST["posters_comment_id"])
-                    $message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
+              } elseif (isset($_POST["btnScriptReply"])){ //They clicked the root comment button
+                
+                $comment_success = $this->db->comment_on_script($_POST["script_id"], 
+                    $_SESSION["id"], $_POST["comment_text"]);
+
+                if ($comment_success) {
+                    header("Location: ?command=fullscript&script=".$_POST["script_id"]);
+
+                    // the $messages aren't implemented on the script page. Not sure how to handle.
+                    //$message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
+                } else {
+                    $qwerty = 1;
+                    //$message = "<div class='alert alert-danger'>Unable to post comment.</div>";
                 }
-                else {
-                    $message = "<div class='alert alert-danger'>Unable to post comment.</div>";
-                }
+
               }
               elseif (isset($_POST["btnCommentReply"])) {
                 $comment_success = $this->db->comment_on_comment($_POST["comment_id"], $_POST["posters_user_id"], $_POST["text"]);
