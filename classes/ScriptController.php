@@ -64,10 +64,13 @@ class ScriptController {
 
     // Manages the home page
     public function home() {
+        // Sets the pagination variables and the default sort options
         $page = 1;
         $sortby = "script_id";
         $order = "ASC";
         $is_more = true;
+
+        // The GET handlers
         if(!empty($_GET['page'])) {
             $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT);
             if(false === $page) {
@@ -90,6 +93,7 @@ class ScriptController {
         }
 
         // Right now it just shows the scripts in the submission order.
+        // TODO add a way for user to set the GETs
         $list_of_scripts = $this->db->get_paged_scripts($page, $sortby, $order);
         if (count($list_of_scripts) < 10) {
             $is_more = false;
@@ -136,7 +140,8 @@ class ScriptController {
             } else {
                 // create a new user and adds their names to user_full_names (including first, middle, and last)
                 //var_dump($_POST);
-                $insert = $this->db->add_user($_POST["email"], $_POST["username"],$_POST["password"], $_POST["fname"], $_POST["mname"], $_POST["lname"]);
+                $insert = $this->db->add_user($_POST["email"], $_POST["username"], 
+                    $_POST["password"], $_POST["fname"], $_POST["mname"], $_POST["lname"]);
                 if ($insert === false) {
                     $message = "<div class='alert alert-danger'>Error inserting new user.</div>";
                 } else { // user successfully created
@@ -211,7 +216,8 @@ class ScriptController {
 
         // initialize variables to get passed/updated to the view
         $script = [];
-        $comment_list = [];
+        $root_comments = [];
+        $child_comments = [];
         $owner = "disabled";
 
         // check to see if there's a script request in the GET
@@ -220,7 +226,7 @@ class ScriptController {
             if(false === $script_id) {
                 header("Location: ?command=home");
             } else {
-                // build the script and root comment arrays
+                // build the script and comment arrays
                 $script = $this->db->get_script_by_id($script_id);
                 $root_comments = $this->db->get_root_comments($script_id);
                 $child_comments = $this->db->get_child_comments($script_id);
@@ -269,27 +275,35 @@ class ScriptController {
                     $_SESSION["id"], $_POST["comment_text"]);
 
                 if ($comment_success) {
-                    header("Location: ?command=fullscript&script=".$_POST["script_id"]);
+                    //header("Location: ?command=fullscript&script=".$_POST["script_id"]);
 
-                    // the $messages aren't implemented on the script page. Not sure how to handle.
-                    //$message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
+                    // It's easier to just reload the page than to handle the $messages
+                    // But the message is nice. If we run into errors, may need to use the header
+                    // redirect above.
+
+                    // need to reload the page arrays one way or another
+                        $script = $this->db->get_script_by_id($_POST["script_id"]);
+                        $root_comments = $this->db->get_root_comments($_POST["script_id"]);
+                        $child_comments = $this->db->get_child_comments($_POST["script_id"]);
+                        $message = "<div class='alert alert-success'>Comment posted successfully.</div>";
                 } else {
-                    $qwerty = 1;
-                    //$message = "<div class='alert alert-danger'>Unable to post comment.</div>";
+                    $message = "<div class='alert alert-danger'>Unable to post comment.</div>";
                 }
 
               }
-              elseif (isset($_POST["btnCommentReply"])) {
+              elseif (isset($_POST["btnCommentReply"])) { // They clicked the comment comment button
                 $comment_success = $this->db->comment_on_comment($_POST["parent_comment_id"], 
                     $_SESSION["id"], $_POST["comment_text"]);
                 if ($comment_success) {
-                    header("Location: ?command=fullscript&script=".$_POST["script_id"]);
+                    // header("Location: ?command=fullscript&script=".$_POST["script_id"]);
 
-                    // the $messages aren't implemented on the script page. Not sure how to handle.
-                    //$message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
+                        $script = $this->db->get_script_by_id($_POST["script_id"]);
+                        $root_comments = $this->db->get_root_comments($_POST["script_id"]);
+                        $child_comments = $this->db->get_child_comments($_POST["script_id"]);
+                    
+                        $message = "<div class='alert alert-success'>Comment posted successfully.</div>";
                 } else {
-                    $qwerty = 1;
-                    //$message = "<div class='alert alert-danger'>Unable to post comment.</div>";
+                     $message = "<div class='alert alert-danger'>Unable to post comment.</div>";
                 }
               }
             }
