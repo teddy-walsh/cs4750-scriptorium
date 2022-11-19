@@ -6,7 +6,8 @@
 
 <?php 
     if(isset($_SESSION["id"]) && $_SESSION["id"] != -1){ // if the user is logged in
-        echo "<div><p>Welcome back, " . $_SESSION["username"] . "!";
+        echo "<div><p>Welcome back, <a href = '?command=userpage&user=". $_SESSION["id"] . "'>" . 
+          $_SESSION["username"] . "</a>! </p> </div>";
     }
   ?>
   

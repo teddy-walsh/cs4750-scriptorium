@@ -25,7 +25,8 @@
 
 <section>
 <h3>All of my Scripts</h3>
-  <?php foreach ($list_of_scripts as $script_info): ?>
+  <?php if (!empty($list_of_scripts)) {
+    foreach ($list_of_scripts as $script_info): ?>
 
     <div class="container-fluid fp-script-box">
       <div class="row">
@@ -52,7 +53,9 @@
       </div>
     </div>
 
-    <?php endforeach; ?>
+    <?php endforeach; 
+    }; ?>
+    
 </section>
 
 
