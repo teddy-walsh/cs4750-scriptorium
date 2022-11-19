@@ -468,4 +468,29 @@ echo $e->getMessage();
         }
     }
 
+    function update_userpage($id, $bio, $url) {
+        $query = "UPDATE userpage
+        SET bio=:bio, URL=:url
+        WHERE user_id=:id";
+    try {
+        $statement = $this->db->prepare($query);
+    $statement->bindValue(':bio', $bio);
+    $statement->bindValue(':url', $url);
+    $statement->execute();
+    return true;  
+    }
+    catch (PDOException $e) {
+    // echo $e->getMessage();
+    // if there is a specific SQL-related error message
+    //    echo "generic message (don't reveal SQL-specific message)";
+
+    if (strpos($e->getMessage(), "Duplicate")){
+        echo "Failed to update user page <br/>";
+    }
+    }
+    catch (Exception $e) {
+    echo $e->getMessage();
+    }
+    }
+
 }
