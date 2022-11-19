@@ -37,12 +37,13 @@
                             id="url" 
                             <?php echo($owner); ?>><?php echo $info["URL"]; ?></textarea>
                         <?php } ?>
+                        <!-- Add constraint that it must start with HTTP... or else it defaults to localhost -->
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-12">
                             <?php if ($owner == "enabled") {
                                 echo '<input type="submit" class="btn btn-md btn-warning" 
                                 id="submit" name="btnSave" value="Update">';

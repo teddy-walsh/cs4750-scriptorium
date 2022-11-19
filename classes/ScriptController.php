@@ -186,11 +186,7 @@ class ScriptController {
                 if ($_SESSION["id"] == $_GET["user"]) {
                     $owner = "enabled";
                 }
-                if (isset($_POST)) { // if they clicked the Delete button
-                    var_dump($_POST);
-                    //$this->db->update_userpage($_SESSION["id"], $_POST["bio"], $_POST["url"]);
-                }
-                }
+            }
 
             // populate their list of scripts
             $list_of_scripts = $this->db->get_all_scripts_by_user($_GET["user"]);
@@ -199,8 +195,12 @@ class ScriptController {
             header("Location: ?command=home");
         }
 
+        if (isset($_POST["btnSave"])) { // if they clicked the Update button
+                    
+            $this->db->update_userpage($_SESSION["id"], $_POST["bio"], $_POST["url"]);
+            header("Location: ?command=userpage&user=".$_SESSION["id"]);
+        }
 
-    
         include "templates/userpage.php";
     }
 

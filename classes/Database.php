@@ -471,7 +471,7 @@ echo $e->getMessage();
     function update_userpage($id, $bio, $url) {
         $query = "UPDATE userpage
         SET bio=:bio, URL=:url
-        WHERE user_id=:id";
+        WHERE user_id=" . $id;
     try {
         $statement = $this->db->prepare($query);
     $statement->bindValue(':bio', $bio);
