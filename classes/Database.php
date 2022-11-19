@@ -60,6 +60,7 @@ class Database {
             $userID = $this->db->lastInsertId();
             $success = $this->fullName($userID, $fname, $mname, $lname);
             if ($success)
+                $this->create_default_user_page($userID);
                 return true;
             //echo "Successfully added new user";
 
@@ -437,6 +438,29 @@ echo $e->getMessage();
 
             if (strpos($e->getMessage(), "Duplicate")){
                 echo "Failed to make a comment <br/>";
+            }
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    function create_default_user_page ($user_id) {
+        $query = "INSERT INTO userpage(user_id, bio, URL)
+        VALUES (:user_id, '', '')";
+        try {
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':user_id', $user_id);
+            $statement->execute();
+            return true;   
+        }
+        catch (PDOException $e) {
+            // echo $e->getMessage();
+            // if there is a specific SQL-related error message
+            //    echo "generic message (don't reveal SQL-specific message)";
+
+            if (strpos($e->getMessage(), "Duplicate")){
+                echo "Failed to add user page <br/>";
             }
         }
         catch (Exception $e) {
