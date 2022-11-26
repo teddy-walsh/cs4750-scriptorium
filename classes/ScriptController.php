@@ -268,10 +268,14 @@ class ScriptController {
                     } else {
                         $message = "<div class='alert alert-danger'>Something went wrong.</div>";
                     }
-                }
+                    }   
                 
               } elseif (isset($_POST['btnSave'])){ // If they clicked the Update button
-                
+                $script = $this->db->get_script_by_id($_POST["script_id"]);
+                if (intval($script["user_id"]) != $_SESSION["id"]) {
+                    $message = "<div class='alert alert-danger'>You are not the owner of this script!</div>";
+                }
+                else{
                     $update_success = $this->db->update_script($_POST["script_id"], $_POST["title"], $_POST["description"], $_POST["script"], $_POST["genre"]);
                     if ($update_success) {
                         $script = $this->db->get_script_by_id($_POST["script_id"]);
@@ -280,6 +284,7 @@ class ScriptController {
                     } else {
                         $message = "<div class='alert alert-danger'>Something went wrong.</div>";
                     }
+                }
 
                 
               } elseif (isset($_POST["btnScriptReply"])){ //They clicked the root comment button
