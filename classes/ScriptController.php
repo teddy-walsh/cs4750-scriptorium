@@ -254,7 +254,11 @@ class ScriptController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') { // They clicked some kind of button
               
               if (isset($_POST['btnDelete'])) { // if they clicked the Delete button  
-                  
+                    $script = $this->db->get_script_by_id($_POST["script_id"]);
+                    if (intval($script["user_id"]) != $_SESSION["id"]) {
+                        $message = "<div class='alert alert-danger'>You are not the owner of this script!</div>";
+                    }
+                    else{
                     $delete_success = $this->db->delete_script(intval($_POST["script_id"]));
                     if ($delete_success) {
                         $script = $script_default;
@@ -264,6 +268,7 @@ class ScriptController {
                     } else {
                         $message = "<div class='alert alert-danger'>Something went wrong.</div>";
                     }
+                }
                 
               } elseif (isset($_POST['btnSave'])){ // If they clicked the Update button
                 
