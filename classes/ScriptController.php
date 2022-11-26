@@ -120,6 +120,7 @@ class ScriptController {
         if (isset($_POST["email"])) { 
             // password requirements checker
             $password = $_POST["password"];
+            $secondpassword = $_POST["password2"];
             $uppercase = preg_match('@[A-Z]@', $password);
             $lowercase = preg_match('@[a-z]@', $password);
             $number    = preg_match('@[0-9]@', $password);
@@ -133,7 +134,12 @@ class ScriptController {
                     <li>One number (0-9)</li>
                     </ul>
                     </div>";
-            } else {
+            }
+            else if(strcmp( $password, $secondpassword )!=0) {
+                $message = "<div class='alert-danger'>Passwords do not match!
+                    </div>";
+            }
+            else {
                 // create a new user and adds their names to user_full_names (including first, middle, and last)
                 //var_dump($_POST);
                 $insert = $this->db->add_user($_POST["email"], $_POST["username"],$_POST["password"], $_POST["fname"], $_POST["mname"], $_POST["lname"]);

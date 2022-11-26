@@ -38,6 +38,8 @@
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" placeholder="Password" id="password" name="password"/>
+                        <label for="password2" class="form-label">Retype Password</label>
+                        <input type="password" class="form-control" placeholder="Retype Password" id="password2" name="password2"/>
                         <div id="pwhelplen" class="form-text"></div>
                         <div id="pwhelpuc" class="form-text"></div>
                         <div id="pwhelplc" class="form-text"></div>
@@ -73,9 +75,11 @@
     // Password validate function 
     function passwordValidate(len=8) {
         var password = document.getElementById("password");
+        var password2 = document.getElementById("password2");
         var submit = document.getElementById("submit");
         var pwhelp = document.getElementById("pwhelp");
         var passval = password.value;
+        var pass2val = password2.value;
         var uppercase = /[A-Z]/.test(passval);
         var lowercase = /[a-z]/.test(passval);
         var number = /[0-9]/.test(passval);
@@ -120,9 +124,23 @@
             submit.disabled = false;
             pwhelpnum.textContent = "";
         }
+        // check password match
+        if(passval !== pass2val){
+            password.classList.add("is-invalid");
+            submit.disabled = true;
+            pwhelpnum.textContent = "Passwords Must Match.";
+        }
+        else{
+            password.classList.remove("is-invalid");
+            submit.disabled = false;
+            pwhelpnum.textContent = "";
+        }
     }
 
     document.getElementById("password").addEventListener("keyup", function() {
+        passwordValidate(8);
+    });
+    document.getElementById("password2").addEventListener("keyup", function() {
         passwordValidate(8);
     });
 </script>
