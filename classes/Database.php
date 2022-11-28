@@ -283,6 +283,40 @@ echo $e->getMessage();
         } 
     }
 
+    function get_comment_votes($comment_id) {
+        $query = "SELECT display_name FROM users WHERE (user_id=:uid)";
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':uid', $user_id);
+        $statement->execute();
+        $user = $statement->fetch();
+        if (!empty($user)) { // it found the user
+            return $user["display_name"];
+        } 
+    }
+    function get_script_votes($script_id){
+        $query = "SELECT display_name FROM users WHERE (user_id=:uid)";
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':uid', $user_id);
+        $statement->execute();
+        $user = $statement->fetch();
+        if (!empty($user)) { // it found the user
+            return $user["display_name"];
+        } 
+    }
+    function get_user_vote_on_comment($user_id,$comment_id){
+
+    }
+    function get_user_vote_on_script($user_id, $script_id){
+        $query = "SELECT display_name FROM users WHERE (user_id=:uid)";
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':uid', $user_id);
+        $statement->execute();
+        $user = $statement->fetch();
+        if (!empty($user)) { // it found the user
+            return $user["display_name"];
+        } 
+    }
+
     function delete_script($script_id) {
         // delete the entry from user_created
         $query = "DELETE FROM user_created WHERE (script_id=:sid)";
