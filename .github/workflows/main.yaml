@@ -22,6 +22,13 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      uses: 73h/gae-app-yaml-replace-env-variables@v0.1
+      env:
+          DB_USER: ${{ secrets.GCP_DB_USER }}
+          DB_PASS: ${{ secrets.GCP_DB_PASS }}
+          DB_DSN: ${{ secrets.GCP_DSN }}
+      with:
+        app_yaml_path: "app.yaml"
 
     - name: Deploy to App Engine
       id: deploy
