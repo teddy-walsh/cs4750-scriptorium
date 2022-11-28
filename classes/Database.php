@@ -5,13 +5,17 @@ class Database {
 
     public function __construct() {
 
-            $username = Config::$db["user"];
-            $password = Config::$db["pass"];
-            $dsn = Config::$db["dsn"];
+            // LocalHost
+            // $username = "root";
+            // $password = "";
+            // $dsn = "mysql:host=localhost:3306;dbname=scriptorium";
 
-            // $username = getenv('DB_USER');
-            // $password = getenv('DB_PASS');
-            // $dsn = getenv('GCP_DSN');
+            // GCP
+            $username = getenv('DB_USER');
+            $password = getenv('DB_PASS');
+            $socket = getenv('DB_SOCKET');
+            $dbname = getenv('DB_NAME');
+            $dsn = "mysql:unix_socket=$socket;dbname=$dbname";
 
        try {
             // Connect to the database.
