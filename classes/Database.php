@@ -11,7 +11,9 @@ class Database {
 
             $username = getenv('DB_USER');
             $password = getenv('DB_PASS');
-            $dsn = getenv('GCP_DSN');
+            $socket = getenv('DB_SOCKET');
+            $dbname = getenv('DB_NAME');
+            $dsn = "mysql:unix_socket=$socket;dbname=$dbname";
 
             echo $username;
             echo $password;

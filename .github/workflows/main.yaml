@@ -25,7 +25,8 @@ jobs:
         env:
           DB_USER: ${{ secrets.GCP_DB_USER }}
           DB_PASS: ${{ secrets.GCP_DB_PASS }}
-          DB_DSN: ${{ secrets.GCP_DSN }}
+          DB_SOCKET: ${{ secrets.GCP_DB_SOCKET }}
+          DB_NAME: ${{ secrets.GCP_DB_NAME }}
         with:
           app_yaml_path: "app.yaml"
       - uses: google-github-actions/deploy-appengine@v0.2.0

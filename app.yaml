@@ -20,4 +20,5 @@ handlers:
 env_variables:
   DB_USER: $DB_USER
   DB_PASS: $DB_PASS
-  DB_DSN: $DB_DSN
+  DB_SOCKET: $DB_SOCKET
+  DB_NAME: $DB_NAME
