@@ -5,13 +5,13 @@ class Database {
 
     public function __construct() {
 
-            // $username = Config::$db["user"];
-            // $password = Config::$db["pass"];
-            // $dsn = Config::$db["dsn"];
+            $username = Config::$db["user"];
+            $password = Config::$db["pass"];
+            $dsn = Config::$db["dsn"];
 
-            $username = getenv('DB_USER');
-            $password = getenv('DB_PASS');
-            $dsn = getenv('GCP_DSN');
+            // $username = getenv('DB_USER');
+            // $password = getenv('DB_PASS');
+            // $dsn = getenv('GCP_DSN');
 
        try {
             // Connect to the database.
