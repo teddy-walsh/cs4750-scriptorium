@@ -13,6 +13,10 @@ class Database {
             $password = getenv('DB_PASS');
             $dsn = getenv('GCP_DSN');
 
+            echo $username;
+            echo $password;
+            echo $dsn;
+
        try {
             // Connect to the database.
             $this->db = new PDO($dsn, $username, $password);
