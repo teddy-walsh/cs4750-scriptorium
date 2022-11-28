@@ -35,8 +35,8 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT }}
           credentials: ${{ secrets.GCP_CREDENTIALS }}
 
-    - name: Test
-      run: curl "${{ steps.deploy.outputs.url }}"
+    # - name: Test
+    #   run: curl "${{ steps.deploy.outputs.url }}"
 
 
 # on: push
