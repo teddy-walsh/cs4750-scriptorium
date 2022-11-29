@@ -355,7 +355,8 @@ class ScriptController
                     $_POST["comment_text"]
                 );
                 if ($comment_success) {
-                    header("Location: ?command=fullscript&script=" . $_POST["script_id"]);
+                    $root_comments = $this->db->get_root_comments($script_id);
+                    $child_comments = $this->db->get_child_comments($script_id);
                     // the $messages aren't implemented on the script page. Not sure how to handle.
                     //$message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
                 } else {
@@ -369,7 +370,8 @@ class ScriptController
                     $_POST["comment_text"]
                 );
                 if ($comment_success) {
-                    header("Location: ?command=fullscript&script=" . $_POST["script_id"]);
+                    $root_comments = $this->db->get_root_comments($script_id);
+                    $child_comments = $this->db->get_child_comments($script_id);
 
                     // the $messages aren't implemented on the script page. Not sure how to handle.
                     //$message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
