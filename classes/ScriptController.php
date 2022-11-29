@@ -379,7 +379,7 @@ class ScriptController
                 }
             } elseif (isset($_POST["btnScriptVote"])) {
                 if (!isset($_SESSION["id"])) {
-                    header("Location: ?command=fullscript&script=" . $_POST['script_id']);
+                    header("Location: ?command=fullscript&script=" . $_POST["script_id"]);
                 } else {
                     $vote_success = $this->db->user_script_vote(
                         intval($_SESSION["id"]),
@@ -391,7 +391,7 @@ class ScriptController
 
                     if ($vote_success) {
                         echo "Reaching 1 here.";
-                        header("Location: ?command=fullscript&script=" .  $_POST['script_id']);
+                        header("Location: ?command=fullscript&script=" .  $_POST["script_id"]);
                         echo "Reaching 2 here.";
                         //header("Location:?vote_success" .  $_POST["script_id"]);
                         // echo $vote_success;
@@ -415,6 +415,8 @@ class ScriptController
                         intval($_POST["direction"])
                     );
                     echo $vote_success;
+                    echo "Location: ?command=fullscript&script=" . $_POST["script_id"];
+
                     if ($vote_success) {
                         header("Location: ?command=fullscript&script=" .  $_POST["script_id"]);
                         //header("Location:?vote_success" .  $_POST["script_id"]);
