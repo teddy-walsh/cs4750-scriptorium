@@ -35,32 +35,3 @@ jobs:
           version: v1
           project_id: ${{ secrets.GCP_PROJECT }}
           credentials: ${{ secrets.GCP_CREDENTIALS }}
-
-    # - name: Test
-    #   run: curl "${{ steps.deploy.outputs.url }}"
-
-
-# on: push
-# name: Deploy site on push
-# jobs:
-#   deploy_on_googles_app_engine:
-#     name: Deploy
-#     if: github.ref == 'refs/heads/main'
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: 73h/gae-app-yaml-replace-env-variables@v0.1
-#         env:
-#           DB_USER: ${{ secrets.GCP_DB_USER }}
-#           DB_PASS: ${{ secrets.GCP_DB_PASS }}
-#           DB_DSN: ${{ secrets.GCP_DSN }}
-#         with:
-#           app_yaml_path: "app.yaml"
-#       - uses: 'google-github-actions/auth@v0'
-#         with:
-#           credentials_json: '${{ secrets.GCP_SA_JSON }}'
-#       - uses: 'google-github-actions/deploy-appengine@v0'
-#         with:
-#           deliverables: 'app.yaml'
-#           promote: true
-#           version: 'v1'
