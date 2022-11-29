@@ -24,7 +24,7 @@
         <option value="datetime">Last Update</option>
         <option value="title">Title</option>
         <option value="genre">Genre</option>
-        <!-- <option value="rating">Rating</option> -->
+        <option value="rating">Rating</option>
       </select>
       <select id="order" name="order">
         <option value="ASC">Ascending</option>

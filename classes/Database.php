@@ -215,8 +215,21 @@ echo $e->getMessage();
     }
 
     function get_paged_scripts($page, $ordered_by, $direction) {
+        
         $items_per_page = 10;
         $offset = ($page - 1) * $items_per_page;
+        if($ordered_by == "rating"){
+
+        $query = "SELECT user_id, display_name, title, blurb, genre, datetime, script_id, COALESCE(rating,0) FROM scripts LEFT JOIN (SELECT votes_on_scripts.script_id as script_id1, COALESCE(SUM(direction),0) as rating FROM (votes_on_scripts INNER JOIN votes ON votes_on_scripts.vote_id = votes.vote_id) GROUP BY script_id) as tmp ON scripts.script_id = tmp.script_id1             NATURAL JOIN user_created NATURAL JOIN users
+        ORDER BY " . "COALESCE(rating,0)" . " " . $direction . " LIMIT " . $offset . "," . $items_per_page;
+        $statement = $this->db->prepare($query);
+        $statement->execute();
+        $result = $statement->fetchAll();   // fetch()
+        return $result;
+
+        }
+        
+
         $query = "SELECT user_id, display_name, title, blurb, genre, datetime, script_id 
             FROM scripts 
             NATURAL JOIN user_created 

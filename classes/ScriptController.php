@@ -102,7 +102,13 @@ class ScriptController
 
         if ($sortby == "rating") {
             // Will need a function to handle sorting by rating
-            echo (1 + 1);
+            $list_of_scripts = $this->db->get_paged_scripts($page, $sortby, $order);
+            $script_id_to_score = [];
+            foreach ($list_of_scripts as $script) {
+                $script_id_to_score[$script['script_id']] = $this->db->get_script_votes($script['script_id']);
+                // echo $script['script_id']." ".$script['score'];
+                // echo $script['score'];
+            }
         } else {
             $list_of_scripts = $this->db->get_paged_scripts($page, $sortby, $order);
             $script_id_to_score = [];
