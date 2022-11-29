@@ -243,6 +243,10 @@ section {
   text-align: right;
 }
 
+.vote-count {
+  text-align: right;
+}
+
 .commenter {
   text-align: left;
 }

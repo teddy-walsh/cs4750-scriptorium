@@ -220,6 +220,8 @@ class ScriptController
                 if ($_SESSION["id"] == $_GET["user"]) {
                     $owner = "enabled";
                 }
+            } else {
+                header("Location: ?command=home");
             }
 
             // populate their list of scripts
