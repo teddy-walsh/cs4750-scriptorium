@@ -386,7 +386,7 @@ class ScriptController
                         intval($_POST["script_id"]),
                         intval($_POST["direction"])
                     );
-                    echo $vote_success;
+                    var_dump($_POST);
                     if ($vote_success) {
                         header("Location: ?command=fullscript&script=" .  $_POST["script_id"]);
                         //header("Location:?vote_success" .  $_POST["script_id"]);
