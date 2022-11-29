@@ -21,7 +21,7 @@ require 'styles/head_style.php';
 
                             <span>
                             <form action="?command=fullscript" method="post">
-                            <input type="hidden" id="script-id" name="script_id" value=<?php echo $script["script_id"]?>>                                
+                            <input type="hidden" id="script_id" name="script_id" value=<?php echo $script["script_id"]?>>                                
                             <input type="hidden" id="direction" name="direction" value="1">
                                 <button type="btnScriptVote" name="btnScriptVote" value="btnScriptVote" >
                                     ↑
@@ -29,7 +29,7 @@ require 'styles/head_style.php';
 
                             </form>
                             <form action="?command=fullscript" method="post">
-                                <input type="hidden" id="script-id" name="script_id" value="<?php echo ($script["script_id"]) ?>">
+                                <input type="hidden" id="script_id" name="script_id" value="<?php echo ($script["script_id"]) ?>">
                                 <input type="hidden" id="direction" name="direction" value="0">
                                 <button type="btnScriptVote" name="btnScriptVote" value="btnScriptVote" >
                                     •
@@ -37,7 +37,7 @@ require 'styles/head_style.php';
 
                             </form>
                             <form action="?command=fullscript" method="post">
-                                <input type="hidden" id="script-id" name="script_id" value="<?php echo ($script["script_id"]) ?>">
+                                <input type="hidden" id="script_id" name="script_id" value="<?php echo ($script["script_id"]) ?>">
                                 <input type="hidden" id="direction" name="direction" value="-1">
                                 <button type="btnScriptVote" name="btnScriptVote" value="btnScriptVote" >
                                     ↓
@@ -97,7 +97,7 @@ require 'styles/head_style.php';
                         </div>
                         <div class="col-md-6">
                             <?php if ($owner == "enabled") {
-                                echo '<input type="hidden" id="script-id" 
+                                echo '<input type="hidden" id="script_id" 
                                     name="script_id" value="' . $script["script_id"] . '">';
                                 echo <<< EOT
                                     <input type="submit" class="btn btn-md btn-danger" 
@@ -158,7 +158,7 @@ require 'styles/head_style.php';
                         <!-- BEGIN VOTE FORM -->
                         <span>
                             <form action="?command=fullscript" method="post">
-                            <input type="hidden" id="script-id" name="script_id" value=<?php echo $script["script_id"]?>>                                
+                            <input type="hidden" id="script_id" name="script_id" value=<?php echo $script["script_id"]?>>                                
                             <input type="hidden" id="direction" name="direction" value="1">
                             <input type="hidden" id="comment-id" name="comment_id" value=<?php echo $rootcomment['comment_id'];?>>
 
@@ -168,7 +168,7 @@ require 'styles/head_style.php';
 
                             </form>
                             <form action="?command=fullscript" method="post">
-                            <input type="hidden" id="script-id" name="script_id" value=<?php echo $script["script_id"]?>>                                
+                            <input type="hidden" id="script_id" name="script_id" value=<?php echo $script["script_id"]?>>                                
                             <input type="hidden" id="direction" name="direction" value="0">
                             <input type="hidden" id="comment-id" name="comment_id" value=<?php echo $rootcomment['comment_id'];?>>
                             <button type="btnCommentVote" name="btnCommentVote" value="btnCommentVote" >
@@ -177,7 +177,7 @@ require 'styles/head_style.php';
 
                             </form>
                             <form action="?command=fullscript" method="post">
-                            <input type="hidden" id="script-id" name="script_id" value=<?php echo $script["script_id"]?>>                                
+                            <input type="hidden" id="script_id" name="script_id" value=<?php echo $script["script_id"]?>>                                
                             <input type="hidden" id="direction" name="direction" value="-1">
                             <input type="hidden" id="comment-id" name="comment_id" value=<?php echo $rootcomment['comment_id'];?>>
                             <button type="btnCommentVote" name="btnCommentVote" value="btnCommentVote" >
@@ -228,7 +228,7 @@ require 'styles/head_style.php';
                                                               <!-- BEGIN VOTE FORM -->
                         <span>
                             <form action="?command=fullscript" method="post">
-                            <input type="hidden" id="script-id" name="script_id" value=<?php echo $script["script_id"]?>>                                
+                            <input type="hidden" id="script_id" name="script_id" value=<?php echo $script["script_id"]?>>                                
                             <input type="hidden" id="direction" name="direction" value="1">
                             <input type="hidden" id="comment-id" name="comment_id" value=<?php echo $childcomment['comment_id'];?>>
 
@@ -238,7 +238,7 @@ require 'styles/head_style.php';
 
                             </form>
                             <form action="?command=fullscript" method="post">
-                            <input type="hidden" id="script-id" name="script_id" value=<?php echo $script["script_id"]?>>                                
+                            <input type="hidden" id="script_id" name="script_id" value=<?php echo $script["script_id"]?>>                                
                             <input type="hidden" id="direction" name="direction" value="0">
                             <input type="hidden" id="comment-id" name="comment_id" value=<?php echo $childcomment['comment_id'];?>>
                             <button type="btnCommentVote" name="btnCommentVote" value="btnCommentVote" >
@@ -247,7 +247,7 @@ require 'styles/head_style.php';
 
                             </form>
                             <form action="?command=fullscript" method="post">
-                            <input type="hidden" id="script-id" name="script_id" value=<?php echo $script["script_id"]?>>                                
+                            <input type="hidden" id="script_id" name="script_id" value=<?php echo $script["script_id"]?>>                                
                             <input type="hidden" id="direction" name="direction" value="-1">
                             <input type="hidden" id="comment-id" name="comment_id" value=<?php echo $childcomment['comment_id'];?>>
                             <button type="btnCommentVote" name="btnCommentVote" value="btnCommentVote" >
@@ -277,7 +277,7 @@ require 'styles/head_style.php';
                     <div class="col-md-9">
                         <form action="?command=fullscript" method="post">
                             <input type="text" class=".input-lg form-control" name="comment_text" id="description" placeholder="Reply to the above" />
-                            <input type="hidden" id="script-id" name="script-id" value="<?php echo ($script["script_id"]) ?>" />
+                            <input type="hidden" id="script_id" name="script_id" value="<?php echo ($script["script_id"]) ?>" />
                             <input type="hidden" id="parent_comment_id" name="parent_comment_id" value="<?php echo ($rootcomment["comment_id"]) ?>" />
                     </div>
                     <div class="col-md-2">
@@ -297,7 +297,7 @@ require 'styles/head_style.php';
         <div class="col-md-10">
             <form action="?command=fullscript" method="post">
                 <input type="text" class=".input-lg form-control" name="comment_text" id="description" placeholder="Comment on the script">
-                <input type="hidden" id="script-id" name="script_id" value="<?php echo ($script["script_id"]) ?>">
+                <input type="hidden" id="script_id" name="script_id" value="<?php echo ($script["script_id"]) ?>">
         </div>
         <div class="col-md-2">
             <input type="submit" class="btn btn-lg btn-warning" id="comment" name="btnScriptReply" value="Post">

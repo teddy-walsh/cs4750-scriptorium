@@ -370,7 +370,6 @@ class ScriptController
                 );
                 if ($comment_success) {
                     header("Location: ?command=fullscript&script=" . $_POST["script_id"]);
-
                     // the $messages aren't implemented on the script page. Not sure how to handle.
                     //$message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
                 } else {
@@ -386,14 +385,15 @@ class ScriptController
                         intval($_POST["script_id"]),
                         intval($_POST["direction"])
                     );
-                    echo ($vote_success == true);
-                    var_dump($vote_success);
+                    // echo ($vote_success == true);
+                    // var_dump($vote_success);
 
                     if ($vote_success) {
-                         echo "Location: ?command=fullscript&script=" . urlencode($_POST["script_id"]);
-                        header("Location: ?command=fullscript&script=" . 
-                            urlencode($_POST["script_id"]));
-                        echo "Reaching 2 here.";
+                         // echo "Location: ?command=fullscript&script=" . $_POST["script_id"];
+                        header("Location: ?command=fullscript&script=" . $_POST['script_id']);
+                        //  $success_url = "?command=fullscript&script=" . $_POST["script_id"];
+                        // echo "<META http-equiv='refresh' content='0;URL=$success_url'>";
+                        // echo "Reaching 2 here.";
                         //header("Location:?vote_success" .  $_POST["script_id"]);
                         // echo $vote_success;
                         //header("Location: ?command=fullscript&script2=".$vote_success["vote_id"]);
