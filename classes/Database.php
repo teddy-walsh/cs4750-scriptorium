@@ -6,16 +6,16 @@ class Database {
     public function __construct() {
 
             // // LocalHost
-            $username = "root";
-            $password = "";
-            $dsn = "mysql:dbname=scriptorium;host=127.0.0.1";
+            // $username = "root";
+            // $password = "";
+            // $dsn = "mysql:dbname=scriptorium;host=127.0.0.1";
 
             //GCP
-            // $username = getenv('DB_USER');
-            // $password = getenv('DB_PASS');
-            // $socket = getenv('DB_SOCKET');
-            // $dbname = getenv('DB_NAME');
-            // $dsn = "mysql:unix_socket=$socket;dbname=$dbname";
+            $username = getenv('DB_USER');
+            $password = getenv('DB_PASS');
+            $socket = getenv('DB_SOCKET');
+            $dbname = getenv('DB_NAME');
+            $dsn = "mysql:unix_socket=$socket;dbname=$dbname";
 
        try {
             // Connect to the database.
@@ -228,6 +228,13 @@ echo $e->getMessage();
         return $result;
     }
 
+//     function get_paged_scripts_by_rating($page, $direction) {
+
+
+// SELECT script_id, SUM(direction), title FROM (votes_on_scripts NATURAL JOIN votes NATURAL JOIN scripts) GROUP BY script_id ORDER BY SUM(direction) DESC; 
+
+//     }
+
     function get_all_scripts_by_user($user_id) {
         $query = "SELECT * FROM scripts NATURAL JOIN user_created WHERE (user_id=:uid)";
         $statement = $this->db->prepare($query);
@@ -302,6 +309,8 @@ echo $e->getMessage();
         } 
     }
     function get_script_votes($script_id){
+        // SET @p0='2'; CALL `count_script_votes`(@p0, @p1); SELECT @p1 AS `score`;
+
         $query = "SELECT COALESCE(SUM(direction),0) as score FROM (votes_on_scripts INNER JOIN votes ON votes_on_scripts.vote_id = votes.vote_id) WHERE script_id =:cid";
         $statement = $this->db->prepare($query);
         $statement->bindValue(':cid', $script_id);
