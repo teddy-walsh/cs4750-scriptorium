@@ -355,8 +355,7 @@ class ScriptController
                     $_POST["comment_text"]
                 );
                 if ($comment_success) {
-                    $root_comments = $this->db->get_root_comments($script_id);
-                    $child_comments = $this->db->get_child_comments($script_id);
+                    header("Location: ?command=fullscript&script=" . $_POST["script_id"]);
                     // the $messages aren't implemented on the script page. Not sure how to handle.
                     //$message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
                 } else {
@@ -370,8 +369,7 @@ class ScriptController
                     $_POST["comment_text"]
                 );
                 if ($comment_success) {
-                    $root_comments = $this->db->get_root_comments($script_id);
-                    $child_comments = $this->db->get_child_comments($script_id);
+                    header("Location: ?command=fullscript&script=" . $_POST["script_id"]);
 
                     // the $messages aren't implemented on the script page. Not sure how to handle.
                     //$message = "<div class='alert alert-danger'>Comment posted successfully.</div>";
@@ -381,7 +379,7 @@ class ScriptController
                 }
             } elseif (isset($_POST["btnScriptVote"])) {
                 if (!isset($_SESSION["id"])) {
-                    header("Location: ?command=fullscript&script=" . $_POST["script_id"]);
+                    header("Location: ?command=fullscript&script=" . $_POST['script_id']);
                 } else {
                     $vote_success = $this->db->user_script_vote(
                         intval($_SESSION["id"]),
@@ -393,7 +391,7 @@ class ScriptController
 
                     if ($vote_success) {
                         echo "Reaching 1 here.";
-                        header("Location: ?command=fullscript&script=" .  $_POST["script_id"]);
+                        header("Location: ?command=fullscript&script=" .  $_POST['script_id']);
                         echo "Reaching 2 here.";
                         //header("Location:?vote_success" .  $_POST["script_id"]);
                         // echo $vote_success;
