@@ -390,8 +390,8 @@ class ScriptController
                     var_dump($vote_success);
 
                     if ($vote_success) {
-                        echo "Reaching 1 here.";
-                        header("Location: ?command=fullscript&script=" .  $_POST["script_id"]);
+                         echo "Location: ?command=fullscript&script=" . $_POST["script_id"];
+                        header("Location: ?command=fullscript&script=" . $_POST["script_id"]);
                         echo "Reaching 2 here.";
                         //header("Location:?vote_success" .  $_POST["script_id"]);
                         // echo $vote_success;
@@ -418,7 +418,7 @@ class ScriptController
                     echo "Location: ?command=fullscript&script=" . $_POST["script_id"];
 
                     if ($vote_success) {
-                        header("Location: ?command=fullscript&script=" .  $_POST["script_id"]);
+                        header("Location: ?command=fullscript&script=" . $_POST["script_id"]);
                         //header("Location:?vote_success" .  $_POST["script_id"]);
                         // echo $vote_success;
                         //header("Location: ?command=fullscript&script2=".$vote_success["vote_id"]);
