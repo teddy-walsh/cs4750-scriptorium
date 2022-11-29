@@ -60,10 +60,15 @@
           <?php $scriptlink = "?command=fullscript&script=".$script_info['script_id']; ?>
           <span><a href="<?php echo $scriptlink; ?>">Read more ⟶</a></span>
         </div>
-        <div class="col-md-9 author">
+        <div class="col-md-3 author">
           <?php $userlink = "?command=userpage&user=".$script_info['user_id']; ?>
           <span><a href="<?php echo $userlink; ?>"><?php echo $script_info["display_name"]; ?></a></span>
         </div>
+        <div class="col-md-3 author">
+          <?php $score = $script_id_to_score[$script_info['script_id']]; ?>
+          <span><?php echo "Score: ".$score; ?></span>
+        </div>
+
       </div>
     </div>
 

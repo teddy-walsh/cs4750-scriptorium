@@ -5,17 +5,17 @@ class Database {
 
     public function __construct() {
 
-            // LocalHost
-            $username = "root";
-            $password = "";
-            $dsn = "mysql:host=localhost:3306;dbname=scriptorium";
+            // // LocalHost
+            // $username = "root";
+            // $password = "";
+            // $dsn = "mysql:dbname=scriptorum;host=127.0.0.1";
 
-            // GCP
-            // $username = getenv('DB_USER');
-            // $password = getenv('DB_PASS');
-            // $socket = getenv('DB_SOCKET');
-            // $dbname = getenv('DB_NAME');
-            // $dsn = "mysql:unix_socket=$socket;dbname=$dbname";
+            //GCP
+            $username = getenv('DB_USER');
+            $password = getenv('DB_PASS');
+            $socket = getenv('DB_SOCKET');
+            $dbname = getenv('DB_NAME');
+            $dsn = "mysql:unix_socket=$socket;dbname=$dbname";
 
        try {
             // Connect to the database.
@@ -292,38 +292,139 @@ echo $e->getMessage();
     }
 
     function get_comment_votes($comment_id) {
-        $query = "SELECT display_name FROM users WHERE (user_id=:uid)";
+        $query = "SELECT COALESCE(SUM(direction),0) as count FROM (votes_on_comments INNER JOIN votes ON votes_on_comments.vote_id = votes.vote_id) WHERE comment_id =:cid";
         $statement = $this->db->prepare($query);
-        $statement->bindValue(':uid', $user_id);
+        $statement->bindValue(':cid', $comment_id);
         $statement->execute();
-        $user = $statement->fetch();
-        if (!empty($user)) { // it found the user
-            return $user["display_name"];
+        $count = $statement->fetch();
+        if (!empty($count)) { // it found the user
+            return $count["count"];
         } 
     }
     function get_script_votes($script_id){
-        $query = "SELECT display_name FROM users WHERE (user_id=:uid)";
+        $query = "SELECT COALESCE(SUM(direction),0) as score FROM (votes_on_scripts INNER JOIN votes ON votes_on_scripts.vote_id = votes.vote_id) WHERE script_id =:cid";
         $statement = $this->db->prepare($query);
-        $statement->bindValue(':uid', $user_id);
+        $statement->bindValue(':cid', $script_id);
         $statement->execute();
-        $user = $statement->fetch();
-        if (!empty($user)) { // it found the user
-            return $user["display_name"];
+        $count = $statement->fetch();
+        //print_r($count) ;
+        if (!empty($count)) { // it found the user
+            return $count["score"];
         } 
+        else{
+            return 0;
+        }
     }
-    function get_user_vote_on_comment($user_id,$comment_id){
+    // //Determines how a user can vote.
+    // function get_user_vote_on_comment($user_id,$comment_id){
+    //     $query = "SELECT * FROM (votes_on_comments INNER JOIN votes ON votes_on_comments.vote_id = votes.vote_id) WHERE comment_id =:cid and user_id =:uid";
+    //     $statement = $this->db->prepare($query);
+    //     $statement->bindValue(':uid', $user_id);
+    //     $statement->bindValue(':cid', $comment_id);
+    //     $info = $statement->fetch();
+    //     if (!empty($info)) { // it found the user
+    //         return $info["direction"];
+    //     } 
+    //     else{
+    //         return 0;
+    //     }
+    // }
 
-    }
-    function get_user_vote_on_script($user_id, $script_id){
-        $query = "SELECT display_name FROM users WHERE (user_id=:uid)";
+    // //Determines how a user can vote.
+    // function get_user_vote_on_script($user_id,$script_id){
+    //     $query = "SELECT * FROM (votes_on_scripts INNER JOIN votes ON votes_on_scripts.vote_id = votes.vote_id) WHERE script_id =:cid and user_id =:uid";
+    //     $statement = $this->db->prepare($query);
+    //     $statement->bindValue(':uid', $user_id);
+    //     $statement->bindValue(':cid', $script_id);
+    //     $info = $statement->execute();
+    //     if (!empty($info)) { // it found the user
+    //         return $info["direction"];
+    //     } 
+    //     else{
+    //         return 0;
+    //     }
+    // }
+
+    function user_script_vote($user_id,$script_id,$direction){
+        $query = "SELECT * FROM (votes_on_scripts INNER JOIN votes ON votes_on_scripts.vote_id = votes.vote_id) 
+        WHERE votes_on_scripts.script_id =:script AND votes.user_id =:user";
         $statement = $this->db->prepare($query);
-        $statement->bindValue(':uid', $user_id);
+        $statement->bindValue(':user', $user_id);
+        $statement->bindValue(':script', $script_id);
         $statement->execute();
-        $user = $statement->fetch();
-        if (!empty($user)) { // it found the user
-            return $user["display_name"];
+        $info = $statement->fetch();
+        if (isset($info["vote_id"])) { // User already voted, update direction
+            $query = "UPDATE votes
+                    SET direction=:direction
+                    WHERE vote_id=:vid";
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':direction', $direction);
+            $statement->bindValue(':vid', $info["vote_id"]);
+            $statement->execute();
+
+            return true;
         } 
+
+        else{ //user has not yet voted on this script
+            $query = "INSERT INTO votes(user_id, direction)
+            VALUES ( :uid, :dir)";
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':dir', $direction);
+            $statement->bindValue(':uid', $user_id); 
+
+            $statement->execute();
+            $new_vote_id = $this->db->lastInsertId();
+
+            $query = "INSERT INTO votes_on_scripts(vote_id, script_id)
+            VALUES (:vid, :cid)";
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':vid', $new_vote_id);
+            $statement->bindValue(':cid', $script_id); 
+            $statement->execute();
+            return true; 
+        }
     }
+    
+    function user_comment_vote($user_id,$comment_id,$direction){
+        $query = "SELECT * FROM (votes_on_comments INNER JOIN votes ON votes_on_comments.vote_id = votes.vote_id) 
+        WHERE votes_on_comments.comment_id =:comment AND votes.user_id =:user";
+        $statement = $this->db->prepare($query);
+        $statement->bindValue(':user', $user_id);
+        $statement->bindValue(':comment', $comment_id);
+        $statement->execute();
+        $info = $statement->fetch();
+        if (isset($info["vote_id"])) { // User already voted, update direction
+            $query = "UPDATE votes
+                    SET direction=:direction
+                    WHERE vote_id=:vid";
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':direction', $direction);
+            $statement->bindValue(':vid', $info["vote_id"]);
+            $statement->execute();
+
+            return true;
+        } 
+
+        else{ //user has not yet voted on this script
+            $query = "INSERT INTO votes(user_id, direction)
+            VALUES ( :uid, :dir)";
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':dir', $direction);
+            $statement->bindValue(':uid', $user_id); 
+
+            $statement->execute();
+            $new_vote_id = $this->db->lastInsertId();
+
+            $query = "INSERT INTO votes_on_comments(vote_id, comment_id)
+            VALUES (:vid, :cid)";
+            $statement = $this->db->prepare($query);
+            $statement->bindValue(':vid', $new_vote_id);
+            $statement->bindValue(':cid', $comment_id); 
+            $statement->execute();
+            return true; 
+        }
+    }
+
 
     function delete_script($script_id) {
         // delete the entry from user_created

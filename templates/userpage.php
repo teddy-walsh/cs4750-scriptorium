@@ -83,9 +83,13 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12 readmore">
+        <div class="col-md-6 readmore">
           <?php $scriptlink = "?command=fullscript&script=".$script_info['script_id']; ?>
           <span><a href="<?php echo $scriptlink; ?>">Read more ⟶</a></span>
+        </div>
+        <div class="col-md-3 score">
+          <?php $score = $script_id_to_score[$script_info['script_id']]; ?>
+          <span><?php echo "Score: ".$score; ?></span>
         </div>
       </div>
     </div>
