@@ -5,7 +5,7 @@ class Database {
 
     public function __construct() {
 
-            // // LocalHost
+            // LocalHost
             // $username = "root";
             // $password = "";
             // $dsn = "mysql:dbname=scriptorium;host=127.0.0.1";

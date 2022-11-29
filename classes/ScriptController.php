@@ -390,8 +390,9 @@ class ScriptController
                     var_dump($vote_success);
 
                     if ($vote_success) {
-                         echo "Location: ?command=fullscript&script=" . $_POST["script_id"];
-                        header("Location: ?command=fullscript&script=" . $_POST["script_id"]);
+                         echo "Location: ?command=fullscript&script=" . urlencode($_POST["script_id"]);
+                        header("Location: ?command=fullscript&script=" . 
+                            urlencode($_POST["script_id"]));
                         echo "Reaching 2 here.";
                         //header("Location:?vote_success" .  $_POST["script_id"]);
                         // echo $vote_success;
