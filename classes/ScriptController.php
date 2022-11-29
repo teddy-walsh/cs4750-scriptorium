@@ -64,6 +64,7 @@ class ScriptController {
 
     // Manages the home page
     public function home() {
+        $list_of_scripts = [];
         $page = 1;
         $sortby = "script_id";
         $order = "ASC";
@@ -89,8 +90,13 @@ class ScriptController {
             }
         }
 
-        // Right now it just shows the scripts in the submission order.
-        $list_of_scripts = $this->db->get_paged_scripts($page, $sortby, $order);
+        if ($sortby == "rating") {
+            // Will need a function to handle sorting by rating
+            echo (1+1);
+        } else {
+            $list_of_scripts = $this->db->get_paged_scripts($page, $sortby, $order);
+        }
+        
         if (count($list_of_scripts) < 10) {
             $is_more = false;
         } else {

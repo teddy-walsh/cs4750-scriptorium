@@ -12,7 +12,29 @@
   ?>
   
 <section>
+
+
 <h3>List of Scripts</h3>
+<div class="container-fluid">
+  <div class="row">
+    <form action="?command=home" method="get">
+      <label for="Sorts">Sort scripts by:</label>
+      <select id="sortby" name="sortby">
+        <option value="script_id">Submission Date</option>
+        <option value="datetime">Last Update</option>
+        <option value="title">Title</option>
+        <option value="genre">Genre</option>
+        <!-- <option value="rating">Rating</option> -->
+      </select>
+      <select id="order" name="order">
+        <option value="ASC">Ascending</option>
+        <option value="DESC">Descending</option>
+      </select>
+      <input type="submit" value="Sort">
+    </form>
+
+  </div>
+</div>
 
   <?php foreach ($list_of_scripts as $script_info): ?>
 
