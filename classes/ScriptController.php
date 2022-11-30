@@ -333,8 +333,10 @@ class ScriptController
                     if ($delete_success) {
                         $script = $script_default;
                         $owner = "disabled";
-                        $message = "<div class='alert alert-success'>Script 
-                            successfully deleted.</div>";
+
+                        // $message = "<div class='alert alert-success'>Script 
+                        //     successfully deleted.</div>";
+                        header("Location: ?command=home");
                     } else {
                         $message = "<div class='alert alert-danger'>Something went wrong.</div>";
                     }
@@ -346,8 +348,7 @@ class ScriptController
                 } else {
                     $update_success = $this->db->update_script($_POST["script_id"], $_POST["title"], $_POST["description"], $_POST["script"], $_POST["genre"]);
                     if ($update_success) {
-                        $script = $this->db->get_script_by_id($_POST["script_id"]);
-                        $owner = "enabled";
+                        header("Location: ?command=fullscript&script=" . $_POST["script_id"]);
                         $message = "<div class='alert alert-success'>Script updated.</div>";
                     } else {
                         $message = "<div class='alert alert-danger'>Something went wrong.</div>";
