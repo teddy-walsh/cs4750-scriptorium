@@ -206,7 +206,7 @@ class ScriptController
                 $message = "<div class='alert alert-danger'>Error inserting new script.</div>";
             } else {
                 // all went well
-                $message = "<div class='alert alert-success'>Script successfully inserted.</div>";
+                header("Location: ?command=fullscript&script=" . $insert);
             }
         }
 

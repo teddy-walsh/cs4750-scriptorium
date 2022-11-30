@@ -168,7 +168,7 @@ echo $e->getMessage();
 
             // Let the controller know if the script was inserted AND the user_created table updated
             if ($update_results) {
-                return true;
+                return $new_script_id;
             } else {
                 return false;
             }
