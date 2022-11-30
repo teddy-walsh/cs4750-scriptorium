@@ -323,19 +323,28 @@ echo $e->getMessage();
     }
     function get_script_votes($script_id){
         // SET @p0='2'; CALL `count_script_votes`(@p0, @p1); SELECT @p1 AS `score`;
-
-        $query = "SELECT COALESCE(SUM(direction),0) as score FROM (votes_on_scripts INNER JOIN votes ON votes_on_scripts.vote_id = votes.vote_id) WHERE script_id =:cid";
+//SET @p0=100; CALL `count_script_votes`(@p0, @p1); SELECT @p1 AS `score`;
+        // $query = "SELECT COALESCE(SUM(direction),0) as score FROM (votes_on_scripts INNER JOIN votes ON votes_on_scripts.vote_id = votes.vote_id) WHERE script_id =:sid";
+        $query = "SET @p0 =:sid; CALL `count_script_votes`(@p0);";
         $statement = $this->db->prepare($query);
-        $statement->bindValue(':cid', $script_id);
+        $statement->bindValue(':sid', $script_id);
         $statement->execute();
-        $count = $statement->fetch();
-        //print_r($count) ;
-        if (!empty($count)) { // it found the user
-            return $count["score"];
-        } 
-        else{
-            return 0;
-        }
+        do {
+            $rowset = $statement->fetchAll(PDO::FETCH_ASSOC);
+            if ($rowset) {
+                // print_r($rowset[0]["score"]);
+                return $rowset[0]["score"];
+            }
+        } while ($statement->nextRowset());
+        // $count = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return 0;
+        // print_r($count); 
+        // if (!empty($count)) { // it found the user
+        //     return $count["score"];
+        // } 
+        // else{
+        //     return 0;
+        // }
     }
     // //Determines how a user can vote.
     // function get_user_vote_on_comment($user_id,$comment_id){
