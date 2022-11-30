@@ -5,20 +5,70 @@ require 'styles/head_style.php';
 ?>
 
 <section>
-    <div class="d-flex justify-content-center">
-        <div class="script-form">
-            <form action="?command=fullscript" method="post">
-                <div class="form-group">
+    <div class="container-fluid fp-script-box">
+        <div class="row">
+            <div class="col-md-10 ">
+                <form action="?command=fullscript" method="post">
                     <div class="row">
+                        <div class="col-md-8">
+                            <div class="row ">
+                                <label id="title" name="title">Title</label>
+                                <input type="text" class="form-control" name="title" required value="<?php echo $script["title"]; ?>" <?php echo ($owner); ?>>
+                            </div>
+                            <div class="row bordertables">
+                                <label id="genre" name="genre">Genre</label>
+                                <input type="text" class="form-control" name="genre" required value="<?php echo $script["genre"]; ?>" <?php echo ($owner); ?>>
+                            </div>
+                            <div class="row bordertables">
+                                <label id="description" name="description">Description</label>
+                                <textarea class="form-control" rows="3" name="description" id="description" <?php echo ($owner); ?>><?php echo $script["blurb"]; ?></textarea>
+                            </div>
 
-                        <div class="col-9">
-                            <label id="title" name="title">Title</label>
-                            <input type="text" class="form-control" name="title" required value="<?php echo $script["title"]; ?>" <?php echo ($owner); ?>>
                         </div>
-                        <div class="col-3">
-                            <label id="" name="votes"><?php echo "Score: " . $script_score;  ?> </label>
-                         <!-- BEGIN VOTE FORM -->
+                        <div class="col-md-4">
+                            <div class="row bordertables">
+                                <label id="datetime" name="datetime">Date & Time</label>
+                                <input type="text" class="form-control" name="datetime" id="datetime" disabled readonly value="<?php echo date("F j, Y, g:i a", strtotime($script["datetime"])); ?>">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row bordertables">
+                        <label id="script" name="script"><?php if ($owner == "enabled") {
+                                                                    echo "Edit Your Script";
+                                                                } else {
+                                                                    echo "Script Body";
+                                                                }
 
+                                                                ?></label>
+                        <textarea class="form-control" rows="3" name="script" style="height:200px;" <?php echo ($owner); ?>><?php echo $script["script_body"]; ?></textarea>
+                    </div>
+                    <!-- Buttons -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php if ($owner == "enabled") {
+                                echo '<input type="submit" class="btn btn-lg btn-warning" 
+                                id="submit" name="btnSave" value="Update">';
+                            }; ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?php if ($owner == "enabled") {
+                                echo '<input type="hidden" id="script_id" 
+                                    name="script_id" value="' . $script["script_id"] . '">';
+                                echo <<< EOT
+                                    <input type="submit" class="btn btn-lg btn-danger" 
+                                    id="submit" name="btnDelete" value="Delete" onclick="return confirm('Are you sure?')">
+                                EOT;
+                            }; ?>
+                        </div>
+                    </div>  
+                </form>
+            </div>
+
+            <div class="col-md-2 bordertables">
+
+            <label id="" name="votes"><?php echo "Score: " . $script_score;  ?> </label>
+                         <!-- BEGIN VOTE FORM -->
                             <span>
                             <form action="?command=fullscript" method="post">
                             <input type="hidden" id="script_id" name="script_id" value=<?php echo $script["script_id"]?>>                                
@@ -44,73 +94,11 @@ require 'styles/head_style.php';
                                 </button>  
                             </form>
                             </span>
-                            <!-- end vote form -->
-                        </div>
+            </div>
 
-
-
-
-
-
-                        <div class="col">
-                            <label id="genre" name="genre">Genre</label>
-                            <input type="text" class="form-control" name="genre" required value="<?php echo $script["genre"]; ?>" <?php echo ($owner); ?>>
-                        </div>
-                        <div class="col">
-                            <label id="datetime" name="datetime">Date & Time</label>
-                            <input type="text" class="form-control" name="datetime" id="datetime" disabled readonly value="<?php
-                                                                                                                            echo date("F j, Y, g:i a", strtotime($script["datetime"])); ?>">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col">
-                            <label id="description" name="description">Description</label>
-                            <textarea class="form-control" rows="3" name="description" id="description" <?php echo ($owner); ?>><?php echo $script["blurb"]; ?></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col">
-                            <label id="script" name="script"><?php if ($owner == "enabled") {
-                                                                    echo "Edit Your Script";
-                                                                } else {
-                                                                    echo "Script Body";
-                                                                }
-
-                                                                ?></label>
-                            <textarea class="form-control" rows="3" name="script" style="height:200px;" <?php echo ($owner); ?>><?php echo $script["script_body"]; ?></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <?php if ($owner == "enabled") {
-                                echo '<input type="submit" class="btn btn-md btn-warning" 
-                                id="submit" name="btnSave" value="Update">';
-                            }; ?>
-                        </div>
-                        <div class="col-md-6">
-                            <?php if ($owner == "enabled") {
-                                echo '<input type="hidden" id="script_id" 
-                                    name="script_id" value="' . $script["script_id"] . '">';
-                                echo <<< EOT
-                                    <input type="submit" class="btn btn-md btn-danger" 
-                                    id="submit" name="btnDelete" value="Delete" onclick="return confirm('Are you sure?')">
-                                EOT;
-                            }; ?>
-                        </div>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
-    <?php
+        <?php
     if (!empty($message)) {
         echo $message;
     }
