@@ -270,3 +270,9 @@ section {
   background-color: #FBF7F0;
   padding: 2%;
 }
+
+.bordertables {
+  border-style: solid;
+  border-width: 0px;
+}
+
